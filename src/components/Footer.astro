@@ -1,0 +1,119 @@
+---
+import { kampung, navigasi } from '../data/kampung';
+
+const tahunSekarang = new Date().getFullYear();
+---
+
+<footer class="bg-tanah-900 text-krem-100 mt-24">
+  <div class="container-section py-16">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+      
+      <!-- Kolom 1: Brand & Slogan -->
+      <div class="lg:col-span-1">
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-12 h-12 rounded-full bg-gradient-sunset flex items-center justify-center shadow-md">
+            <span class="text-white font-headline font-bold text-lg">KL</span>
+          </div>
+          <div>
+            <p class="font-display font-bold text-base text-white leading-tight">
+              {kampung.namaLengkap}
+            </p>
+          </div>
+        </div>
+        <p class="font-headline text-xl italic text-emas-400 mb-4">
+          "{kampung.slogan}"
+        </p>
+        <p class="text-sm text-krem-200/80 leading-relaxed">
+          {kampung.taglineSecondary}. Portal resmi untuk warga, mitra, dan pengunjung.
+        </p>
+      </div>
+
+      <!-- Kolom 2: Navigasi -->
+      <div>
+        <h3 class="font-display font-semibold text-sm uppercase tracking-wider text-emas-400 mb-4">
+          Jelajahi
+        </h3>
+        <ul class="space-y-2">
+          {navigasi.map((item) => (
+            <li>
+              <a 
+                href={item.href}
+                class="text-krem-200/90 hover:text-white text-sm transition-colors inline-flex items-center gap-2 group"
+              >
+                <span class="w-1 h-1 rounded-full bg-sunset-400 group-hover:bg-emas-400 transition-colors"></span>
+                {item.label}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Kolom 3: Kontak -->
+      <div>
+        <h3 class="font-display font-semibold text-sm uppercase tracking-wider text-emas-400 mb-4">
+          Kontak
+        </h3>
+        <ul class="space-y-3 text-sm">
+          <li class="flex items-start gap-3">
+            <svg class="w-5 h-5 text-sunset-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+            <span class="text-krem-200/90 leading-relaxed">
+              {kampung.kecamatan}, {kampung.kabupaten}<br/>
+              {kampung.provinsi} {kampung.kodePos}
+            </span>
+          </li>
+          <li class="flex items-start gap-3">
+            <svg class="w-5 h-5 text-sunset-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+            </svg>
+            <a href={`mailto:${kampung.email}`} class="text-krem-200/90 hover:text-emas-400 transition-colors break-all">
+              {kampung.email}
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Kolom 4: Jam Operasional -->
+      <div>
+        <h3 class="font-display font-semibold text-sm uppercase tracking-wider text-emas-400 mb-4">
+          Jam Pelayanan
+        </h3>
+        <dl class="space-y-2 text-sm">
+          <div class="flex justify-between gap-2">
+            <dt class="text-krem-200/70">Senin–Kamis</dt>
+            <dd class="text-krem-200/90 font-medium">{kampung.jamOperasional.seninKamis}</dd>
+          </div>
+          <div class="flex justify-between gap-2">
+            <dt class="text-krem-200/70">Jumat</dt>
+            <dd class="text-krem-200/90 font-medium">{kampung.jamOperasional.jumat}</dd>
+          </div>
+          <div class="flex justify-between gap-2">
+            <dt class="text-krem-200/70">Sabtu–Minggu</dt>
+            <dd class="text-krem-200/60 font-medium">{kampung.jamOperasional.sabtuMinggu}</dd>
+          </div>
+        </dl>
+        <div class="mt-6 pt-4 border-t border-tanah-700">
+          <p class="text-xs text-krem-200/60">
+            Kode Wilayah: <span class="font-mono text-krem-200/90">{kampung.kodeWilayah}</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom bar -->
+  <div class="border-t border-tanah-800 bg-tanah-900/50">
+    <div class="container-section py-6">
+      <div class="flex flex-col sm:flex-row justify-between items-center gap-3 text-xs text-krem-200/70">
+        <p>
+          © {tahunSekarang} {kampung.namaLengkap}. Hak Cipta Dilindungi.
+        </p>
+        <p class="font-mono">
+          {kampung.domain}
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>

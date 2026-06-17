@@ -1,0 +1,89 @@
+---
+import { potensiUnggulan } from '../data/kampung';
+
+const warnaClass: Record<string, { bg: string; text: string; border: string; ring: string }> = {
+  sunset: { 
+    bg: 'bg-sunset-50', 
+    text: 'text-sunset-700', 
+    border: 'border-sunset-200',
+    ring: 'group-hover:ring-sunset-300'
+  },
+  sawah: { 
+    bg: 'bg-sawah-50', 
+    text: 'text-sawah-700', 
+    border: 'border-sawah-200',
+    ring: 'group-hover:ring-sawah-300'
+  },
+  tanah: { 
+    bg: 'bg-tanah-50', 
+    text: 'text-tanah-700', 
+    border: 'border-tanah-200',
+    ring: 'group-hover:ring-tanah-300'
+  }
+};
+---
+
+<section class="bg-krem-50 py-20 md:py-28">
+  <div class="container-section">
+    <!-- Header -->
+    <div class="max-w-3xl mb-16">
+      <div class="eyebrow mb-4">Empat Pilar</div>
+      <h2 class="font-headline text-4xl md:text-5xl font-medium text-tanah-900 leading-tight mb-6 text-balance">
+        Kekayaan yang lahir dari <span class="highlight-brush">tanah Lotaq</span>.
+      </h2>
+      <p class="text-lg text-tanah-600 leading-relaxed text-pretty">
+        Empat sektor unggulan yang menjadi fondasi ekonomi dan identitas Kampung Lotaq, 
+        masing-masing dengan cerita dan potensinya sendiri.
+      </p>
+    </div>
+
+    <!-- Grid Potensi -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+      {potensiUnggulan.map((potensi, index) => {
+        const warna = warnaClass[potensi.warna] || warnaClass.sunset;
+        return (
+          <a 
+            href={`/potensi#${potensi.id}`}
+            class:list={[
+              'group relative overflow-hidden rounded-3xl p-8 lg:p-10',
+              'bg-white border-2 transition-all duration-500',
+              'hover:-translate-y-1 hover:shadow-2xl',
+              warna.border
+            ]}
+          >
+            <!-- Background pattern decoration -->
+            <div class:list={['absolute top-0 right-0 w-32 h-32 rounded-full -translate-y-1/2 translate-x-1/2 opacity-50 transition-transform duration-500 group-hover:scale-150', warna.bg]}></div>
+            
+            <div class="relative">
+              <!-- Nomor urut + Icon -->
+              <div class="flex items-start justify-between mb-6">
+                <div class:list={['w-16 h-16 rounded-2xl flex items-center justify-center text-3xl', warna.bg]}>
+                  <span aria-hidden="true">{potensi.icon}</span>
+                </div>
+                <span class:list={['font-headline text-5xl font-bold opacity-20', warna.text]}>
+                  0{index + 1}
+                </span>
+              </div>
+
+              <!-- Konten -->
+              <h3 class="font-display font-bold text-2xl text-tanah-900 mb-3">
+                {potensi.nama}
+              </h3>
+              <p class="text-tanah-600 leading-relaxed mb-6">
+                {potensi.deskripsi}
+              </p>
+
+              <!-- Link arrow -->
+              <span class:list={['inline-flex items-center gap-2 text-sm font-display font-semibold', warna.text]}>
+                Pelajari lebih lanjut
+                <svg class="w-4 h-4 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                </svg>
+              </span>
+            </div>
+          </a>
+        );
+      })}
+    </div>
+  </div>
+</section>

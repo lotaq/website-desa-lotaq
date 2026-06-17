@@ -1,0 +1,170 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { kampung, petinggi, visiMisi } from '../data/kampung';
+---
+
+<BaseLayout 
+  title="Profil Kampung"
+  description={`Mengenal lebih dekat ${kampung.namaLengkap}. Sejarah, visi misi, dan struktur pemerintahan kampung yang kaya akan tradisi dan inovasi.`}
+>
+  <!-- Hero Profil -->
+  <section class="bg-gradient-to-br from-tanah-100 via-krem-100 to-sunset-50 pattern-dayak relative overflow-hidden">
+    <div class="absolute top-10 right-10 w-72 h-72 bg-sunset-300/20 rounded-full blur-3xl"></div>
+    
+    <div class="container-section py-20 md:py-24 relative">
+      <div class="max-w-4xl">
+        <div class="eyebrow mb-4">Profil Kampung</div>
+        <h1 class="headline-display text-tanah-900 mb-6 text-balance">
+          Mengenal <span class="highlight-brush">{kampung.nama}</span>.
+        </h1>
+        <p class="text-xl text-tanah-700 leading-relaxed max-w-3xl text-pretty">
+          Sebuah kampung di jantung Kabupaten Kutai Barat, lahir dari keluhuran tradisi 
+          dan tumbuh dengan semangat <em class="font-headline italic text-sunset-700">"{kampung.slogan}"</em>.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Identitas Resmi -->
+  <section class="container-section py-20">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+      <div class="lg:col-span-1">
+        <div class="eyebrow mb-4">Identitas</div>
+        <h2 class="font-headline text-3xl font-medium text-tanah-900 leading-tight">
+          Data resmi pemerintahan.
+        </h2>
+      </div>
+
+      <div class="lg:col-span-2">
+        <dl class="grid grid-cols-1 sm:grid-cols-2 gap-6 bg-white rounded-3xl border border-krem-200 p-8 shadow-sm">
+          <div>
+            <dt class="text-xs uppercase tracking-wider font-display font-semibold text-sunset-600 mb-1">Nama Resmi</dt>
+            <dd class="text-lg font-display font-bold text-tanah-900">{kampung.namaLengkap}</dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase tracking-wider font-display font-semibold text-sunset-600 mb-1">Kecamatan</dt>
+            <dd class="text-lg font-display font-bold text-tanah-900">{kampung.kecamatan}</dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase tracking-wider font-display font-semibold text-sunset-600 mb-1">Kabupaten</dt>
+            <dd class="text-lg font-display font-bold text-tanah-900">{kampung.kabupaten}</dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase tracking-wider font-display font-semibold text-sunset-600 mb-1">Provinsi</dt>
+            <dd class="text-lg font-display font-bold text-tanah-900">{kampung.provinsi}</dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase tracking-wider font-display font-semibold text-sunset-600 mb-1">Kode Pos</dt>
+            <dd class="text-lg font-display font-bold text-tanah-900 font-mono">{kampung.kodePos}</dd>
+          </div>
+          <div>
+            <dt class="text-xs uppercase tracking-wider font-display font-semibold text-sunset-600 mb-1">Kode Wilayah</dt>
+            <dd class="text-lg font-display font-bold text-tanah-900 font-mono">{kampung.kodeWilayah}</dd>
+          </div>
+          <div class="sm:col-span-2 pt-4 border-t border-krem-200">
+            <dt class="text-xs uppercase tracking-wider font-display font-semibold text-sunset-600 mb-1">Email Resmi</dt>
+            <dd class="text-lg font-display font-bold">
+              <a href={`mailto:${kampung.email}`} class="text-sunset-600 hover:text-sunset-700 transition-colors">
+                {kampung.email}
+              </a>
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <!-- Visi -->
+  <section class="bg-gradient-sunset py-20 md:py-24 relative overflow-hidden">
+    <div class="absolute inset-0 pattern-dayak opacity-50"></div>
+    <div class="container-section relative">
+      <div class="max-w-4xl mx-auto text-center">
+        <div class="inline-flex items-center gap-2 text-xs uppercase tracking-[0.3em] font-display font-semibold text-white/80 mb-6">
+          <span class="w-8 h-px bg-white/60"></span>
+          Visi
+          <span class="w-8 h-px bg-white/60"></span>
+        </div>
+        <h2 class="font-headline italic text-5xl md:text-6xl lg:text-7xl text-white font-medium leading-tight mb-8">
+          "{visiMisi.visi}"
+        </h2>
+        <p class="text-lg md:text-xl text-white/90 max-w-3xl mx-auto leading-relaxed text-pretty">
+          {visiMisi.visiPanjang}
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Misi -->
+  <section class="container-section py-20 md:py-28">
+    <div class="max-w-3xl mb-16">
+      <div class="eyebrow mb-4">Misi</div>
+      <h2 class="font-headline text-4xl md:text-5xl font-medium text-tanah-900 leading-tight mb-6 text-balance">
+        Lima jalan menuju visi.
+      </h2>
+      <p class="text-lg text-tanah-600 leading-relaxed">
+        Langkah-langkah strategis untuk mewujudkan Kampung Lotaq yang Maju, Mandiri, dan Sejahtera.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {visiMisi.misi.map((misi) => (
+        <div class="bg-white rounded-3xl border border-krem-200 p-8 hover:border-sunset-300 hover:shadow-lg transition-all">
+          <div class="font-headline text-5xl font-bold text-sunset-500/30 mb-4 tabular-nums">
+            {misi.nomor}
+          </div>
+          <h3 class="font-display font-bold text-xl text-tanah-900 mb-3">
+            {misi.judul}
+          </h3>
+          <p class="text-tanah-600 leading-relaxed text-sm">
+            {misi.deskripsi}
+          </p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Pemerintahan -->
+  <section class="bg-krem-100 py-20 md:py-28">
+    <div class="container-section">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div>
+          <div class="eyebrow mb-4">Pemerintahan</div>
+          <h2 class="font-headline text-4xl md:text-5xl font-medium text-tanah-900 leading-tight mb-6 text-balance">
+            Pemimpin yang melayani.
+          </h2>
+          <p class="text-lg text-tanah-600 leading-relaxed mb-8">
+            Pemerintahan Kampung Lotaq dipimpin oleh Petinggi Kampung yang dipilih melalui mekanisme yang sah, 
+            didukung oleh aparatur dan Badan Permusyawaratan Kampung (BPK).
+          </p>
+
+          <div class="bg-white rounded-2xl p-6 border border-krem-200 shadow-sm">
+            <p class="text-xs uppercase tracking-wider font-display font-semibold text-sunset-600 mb-2">
+              Petinggi Kampung Saat Ini
+            </p>
+            <p class="font-headline text-3xl font-bold text-tanah-900">
+              {petinggi.nama}
+            </p>
+            <p class="text-sm text-tanah-500 mt-2">
+              Periode {petinggi.periode}
+            </p>
+          </div>
+        </div>
+
+        <div class="relative aspect-square max-w-md mx-auto lg:ml-auto">
+          <div class="absolute inset-0 bg-gradient-sunset rounded-3xl rotate-3"></div>
+          <div class="absolute inset-0 bg-white rounded-3xl shadow-2xl -rotate-2 flex items-center justify-center">
+            <div class="text-center p-10">
+              <div class="text-6xl mb-4">🏛️</div>
+              <p class="font-headline text-2xl font-bold text-tanah-900 mb-2">
+                Pemerintah Kampung
+              </p>
+              <p class="text-sm text-tanah-500">
+                Struktur lengkap akan ditampilkan di sini
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

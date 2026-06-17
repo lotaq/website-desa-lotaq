@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import SambutanPetinggi from '../components/SambutanPetinggi.astro';
+import PotensiSection from '../components/PotensiSection.astro';
+import StatistikSection from '../components/StatistikSection.astro';
+import BeritaSection from '../components/BeritaSection.astro';
+---
+
+<BaseLayout 
+  title="Beranda"
+  description="Portal resmi Pemerintah Kampung Lotaq. Maju Mandiri Sejahtera. Jelajahi potensi pariwisata, pertanian, perkebunan, dan perikanan kampung kami di Kutai Barat, Kalimantan Timur."
+>
+  <Hero />
+  <SambutanPetinggi />
+  <PotensiSection />
+  <StatistikSection />
+  <BeritaSection />
+</BaseLayout>

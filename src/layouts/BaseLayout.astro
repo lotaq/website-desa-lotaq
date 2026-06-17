@@ -1,0 +1,102 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { kampung } from '../data/kampung';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description = `Portal resmi ${kampung.namaLengkap}, Kecamatan ${kampung.kecamatan}, Kabupaten ${kampung.kabupaten}, Provinsi ${kampung.provinsi}. ${kampung.slogan}.`,
+  image = '/og-image.jpg',
+  noindex = false
+} = Astro.props;
+
+const fullTitle = title 
+  ? `${title} | ${kampung.namaLengkap}` 
+  : `${kampung.namaLengkap} - ${kampung.slogan}`;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
+---
+
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="generator" content={Astro.generator} />
+  
+  <!-- Primary Meta Tags -->
+  <title>{fullTitle}</title>
+  <meta name="title" content={fullTitle} />
+  <meta name="description" content={description} />
+  <meta name="author" content={kampung.namaLengkap} />
+  <link rel="canonical" href={canonicalURL} />
+  
+  {noindex && <meta name="robots" content="noindex, nofollow" />}
+  
+  <!-- Geographic Tags -->
+  <meta name="geo.region" content="ID-KI" />
+  <meta name="geo.placename" content={`${kampung.nama}, ${kampung.kecamatan}, ${kampung.kabupaten}`} />
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={canonicalURL} />
+  <meta property="og:title" content={fullTitle} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={new URL(image, Astro.site).toString()} />
+  <meta property="og:locale" content="id_ID" />
+  <meta property="og:site_name" content={kampung.namaLengkap} />
+  
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content={canonicalURL} />
+  <meta property="twitter:title" content={fullTitle} />
+  <meta property="twitter:description" content={description} />
+  <meta property="twitter:image" content={new URL(image, Astro.site).toString()} />
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  
+  <!-- Structured Data: Government Organization -->
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "GovernmentOrganization",
+    "name": kampung.namaLengkap,
+    "alternateName": kampung.nama,
+    "url": kampung.website,
+    "email": kampung.email,
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": kampung.kecamatan,
+      "addressRegion": kampung.provinsi,
+      "postalCode": kampung.kodePos,
+      "addressCountry": "ID"
+    },
+    "areaServed": {
+      "@type": "Place",
+      "name": kampung.nama
+    },
+    "slogan": kampung.slogan
+  })} />
+</head>
+<body class="min-h-screen flex flex-col">
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-sunset-500 focus:text-white focus:rounded-lg">
+    Loncat ke konten utama
+  </a>
+  
+  <Header />
+  
+  <main id="main-content" class="flex-1">
+    <slot />
+  </main>
+  
+  <Footer />
+</body>
+</html>

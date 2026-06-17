@@ -1,0 +1,195 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { kampung } from '../data/kampung';
+---
+
+<BaseLayout 
+  title="Kontak"
+  description={`Hubungi ${kampung.namaLengkap}. Kantor di ${kampung.alamat}. Email ${kampung.email}.`}
+>
+  <!-- Hero -->
+  <section class="bg-gradient-to-br from-krem-100 to-sunset-50 pattern-dayak relative overflow-hidden">
+    <div class="container-section py-20 md:py-24 relative">
+      <div class="max-w-4xl">
+        <div class="eyebrow mb-4">Kontak</div>
+        <h1 class="headline-display text-tanah-900 mb-6 text-balance">
+          Mari <span class="highlight-brush">terhubung</span>.
+        </h1>
+        <p class="text-xl text-tanah-700 leading-relaxed max-w-3xl text-pretty">
+          Kami terbuka untuk pertanyaan, saran, kerja sama, atau sekadar bertukar sapa. 
+          Pilih cara yang paling nyaman untuk Anda.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Info Kontak Grid -->
+  <section class="container-section py-20">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-16">
+      <!-- Email -->
+      <a href={`mailto:${kampung.email}`} class="group card-warm">
+        <div class="w-14 h-14 rounded-2xl bg-sunset-100 flex items-center justify-center mb-6 group-hover:bg-sunset-200 transition-colors">
+          <svg class="w-7 h-7 text-sunset-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+          </svg>
+        </div>
+        <h3 class="font-display font-bold text-xl text-tanah-900 mb-2">Email</h3>
+        <p class="text-tanah-500 text-sm mb-4">Cara paling cepat untuk pertanyaan tertulis</p>
+        <p class="font-mono text-sunset-600 text-sm break-all group-hover:text-sunset-700 transition-colors">
+          {kampung.email}
+        </p>
+      </a>
+
+      <!-- Alamat -->
+      <div class="card-warm">
+        <div class="w-14 h-14 rounded-2xl bg-sawah-100 flex items-center justify-center mb-6">
+          <svg class="w-7 h-7 text-sawah-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+          </svg>
+        </div>
+        <h3 class="font-display font-bold text-xl text-tanah-900 mb-2">Kantor Kampung</h3>
+        <p class="text-tanah-500 text-sm mb-4">Datang langsung untuk pelayanan</p>
+        <address class="not-italic text-tanah-700 text-sm leading-relaxed">
+          {kampung.nama}<br/>
+          Kecamatan {kampung.kecamatan}<br/>
+          Kabupaten {kampung.kabupaten}<br/>
+          {kampung.provinsi} {kampung.kodePos}
+        </address>
+      </div>
+
+      <!-- Jam Pelayanan -->
+      <div class="card-warm">
+        <div class="w-14 h-14 rounded-2xl bg-tanah-100 flex items-center justify-center mb-6">
+          <svg class="w-7 h-7 text-tanah-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+        <h3 class="font-display font-bold text-xl text-tanah-900 mb-2">Jam Pelayanan</h3>
+        <p class="text-tanah-500 text-sm mb-4">Waktu kunjungan kantor</p>
+        <dl class="space-y-1.5 text-sm">
+          <div class="flex justify-between gap-2">
+            <dt class="text-tanah-600">Senin–Kamis</dt>
+            <dd class="text-tanah-900 font-medium">{kampung.jamOperasional.seninKamis}</dd>
+          </div>
+          <div class="flex justify-between gap-2">
+            <dt class="text-tanah-600">Jumat</dt>
+            <dd class="text-tanah-900 font-medium">{kampung.jamOperasional.jumat}</dd>
+          </div>
+          <div class="flex justify-between gap-2">
+            <dt class="text-tanah-400">Sabtu–Minggu</dt>
+            <dd class="text-tanah-400 font-medium">{kampung.jamOperasional.sabtuMinggu}</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+
+    <!-- Form Kontak / Pengaduan -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+      <div>
+        <div class="eyebrow mb-4">Kirim Pesan</div>
+        <h2 class="font-headline text-4xl font-medium text-tanah-900 leading-tight mb-6 text-balance">
+          Punya pertanyaan atau pengaduan?
+        </h2>
+        <p class="text-tanah-600 leading-relaxed mb-6">
+          Sampaikan langsung kepada kami. Setiap pesan akan kami baca dan tanggapi 
+          sesuai dengan tata kelola pelayanan publik kampung.
+        </p>
+        <ul class="space-y-3 text-sm text-tanah-600">
+          <li class="flex items-start gap-3">
+            <svg class="w-5 h-5 text-sawah-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+            </svg>
+            <span>Respon dalam 2-3 hari kerja</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <svg class="w-5 h-5 text-sawah-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+            </svg>
+            <span>Identitas pengirim kami jaga kerahasiaannya</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <svg class="w-5 h-5 text-sawah-600 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+            </svg>
+            <span>Pengaduan ditindaklanjuti sesuai prosedur</span>
+          </li>
+        </ul>
+      </div>
+
+      <form action={`mailto:${kampung.email}`} method="post" enctype="text/plain" class="bg-white border border-krem-200 rounded-3xl p-8 shadow-sm space-y-5">
+        <div>
+          <label for="nama" class="block text-sm font-display font-semibold text-tanah-800 mb-2">
+            Nama Lengkap <span class="text-sunset-600">*</span>
+          </label>
+          <input 
+            type="text" 
+            id="nama" 
+            name="nama" 
+            required
+            class="w-full px-4 py-3 border border-krem-300 rounded-xl focus:border-sunset-500 focus:ring-2 focus:ring-sunset-200 outline-none transition-all"
+            placeholder="Nama Anda"
+          />
+        </div>
+
+        <div>
+          <label for="email" class="block text-sm font-display font-semibold text-tanah-800 mb-2">
+            Alamat Email <span class="text-sunset-600">*</span>
+          </label>
+          <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            required
+            class="w-full px-4 py-3 border border-krem-300 rounded-xl focus:border-sunset-500 focus:ring-2 focus:ring-sunset-200 outline-none transition-all"
+            placeholder="email@contoh.com"
+          />
+        </div>
+
+        <div>
+          <label for="kategori" class="block text-sm font-display font-semibold text-tanah-800 mb-2">
+            Kategori <span class="text-sunset-600">*</span>
+          </label>
+          <select 
+            id="kategori" 
+            name="kategori" 
+            required
+            class="w-full px-4 py-3 border border-krem-300 rounded-xl focus:border-sunset-500 focus:ring-2 focus:ring-sunset-200 outline-none transition-all bg-white"
+          >
+            <option value="">Pilih kategori pesan</option>
+            <option value="pertanyaan">Pertanyaan Umum</option>
+            <option value="pengaduan">Pengaduan</option>
+            <option value="kerjasama">Permohonan Kerja Sama</option>
+            <option value="wisata">Informasi Wisata</option>
+            <option value="lainnya">Lainnya</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="pesan" class="block text-sm font-display font-semibold text-tanah-800 mb-2">
+            Pesan <span class="text-sunset-600">*</span>
+          </label>
+          <textarea 
+            id="pesan" 
+            name="pesan" 
+            rows="5"
+            required
+            class="w-full px-4 py-3 border border-krem-300 rounded-xl focus:border-sunset-500 focus:ring-2 focus:ring-sunset-200 outline-none transition-all resize-none"
+            placeholder="Tuliskan pesan Anda di sini..."
+          ></textarea>
+        </div>
+
+        <button type="submit" class="btn-primary w-full">
+          Kirim Pesan
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"/>
+          </svg>
+        </button>
+
+        <p class="text-xs text-tanah-500 text-center">
+          Dengan mengirim pesan, Anda menyetujui pesan diteruskan ke email resmi kampung.
+        </p>
+      </form>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,72 @@
+---
+import { kampung } from '../data/kampung';
+---
+
+<section class="relative overflow-hidden bg-gradient-sunset pattern-dayak">
+  <!-- Overlay gradient -->
+  <div class="absolute inset-0 bg-gradient-to-br from-sunset-600/30 via-transparent to-sawah-700/40"></div>
+  
+  <!-- Decorative elements -->
+  <div class="absolute top-20 right-10 w-72 h-72 bg-emas-400/20 rounded-full blur-3xl"></div>
+  <div class="absolute bottom-10 left-10 w-96 h-96 bg-sawah-500/20 rounded-full blur-3xl"></div>
+  
+  <div class="container-section relative py-20 md:py-28 lg:py-36">
+    <div class="max-w-4xl">
+      <!-- Eyebrow -->
+      <div class="inline-flex items-center gap-3 mb-8 animate-fade-in">
+        <span class="w-12 h-px bg-white/60"></span>
+        <span class="text-xs uppercase tracking-[0.3em] font-display font-semibold text-white/90">
+          {kampung.kecamatan} · {kampung.kabupaten}
+        </span>
+      </div>
+
+      <!-- Headline utama: Slogan resmi sebagai hero -->
+      <h1 class="font-headline font-medium text-white mb-6 animate-fade-up" style="animation-delay: 0.1s;">
+        <span class="block text-2xl md:text-3xl lg:text-4xl text-white/80 mb-2 font-display font-normal">
+          Selamat datang di
+        </span>
+        <span class="block text-5xl md:text-6xl lg:text-7xl xl:text-8xl leading-[1.05] tracking-tight">
+          {kampung.namaLengkap}
+        </span>
+      </h1>
+
+      <!-- Slogan resmi - signature element -->
+      <div class="mt-10 mb-12 animate-fade-up" style="animation-delay: 0.3s;">
+        <div class="inline-flex items-baseline gap-4 px-6 py-4 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20">
+          <span class="text-xs uppercase tracking-widest font-display font-semibold text-emas-400">
+            Visi Kami
+          </span>
+          <span class="text-2xl md:text-3xl font-headline italic text-white">
+            "{kampung.slogan}"
+          </span>
+        </div>
+      </div>
+
+      <!-- Deskripsi singkat -->
+      <p class="max-w-2xl text-lg md:text-xl text-white/90 leading-relaxed mb-10 animate-fade-up" style="animation-delay: 0.5s;">
+        Portal resmi pemerintah kampung untuk warga, mitra, dan pengunjung. 
+        Jelajahi potensi, ikuti perkembangan, dan terhubung dengan kami.
+      </p>
+
+      <!-- Tombol CTA -->
+      <div class="flex flex-wrap gap-4 animate-fade-up" style="animation-delay: 0.7s;">
+        <a href="/profil" class="btn-primary bg-white !text-sunset-600 hover:!bg-krem-100 shadow-2xl shadow-black/20">
+          Profil Kampung
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+          </svg>
+        </a>
+        <a href="/potensi" class="btn-outline-white">
+          Lihat Potensi
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom wave divider -->
+  <div class="relative">
+    <svg class="block w-full h-12 md:h-20 text-krem-50" viewBox="0 0 1440 80" preserveAspectRatio="none" aria-hidden="true">
+      <path fill="currentColor" d="M0,32L80,37.3C160,43,320,53,480,53.3C640,53,800,43,960,37.3C1120,32,1280,32,1360,32L1440,32L1440,80L1360,80C1280,80,1120,80,960,80C800,80,640,80,480,80C320,80,160,80,80,80L0,80Z"></path>
+    </svg>
+  </div>
+</section>

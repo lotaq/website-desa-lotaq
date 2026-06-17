@@ -1,0 +1,79 @@
+---
+import { petinggi } from '../data/kampung';
+---
+
+<section class="container-section py-20 md:py-28">
+  <div class="grid grid-cols-1 lg:grid-cols-5 gap-12 lg:gap-16 items-center">
+    
+    <!-- Foto Petinggi -->
+    <div class="lg:col-span-2 order-1">
+      <div class="relative max-w-sm mx-auto lg:mx-0">
+        <!-- Decorative frame -->
+        <div class="absolute -top-4 -left-4 right-4 bottom-4 bg-sunset-100 rounded-3xl -rotate-2"></div>
+        <div class="absolute -top-2 -right-2 left-2 bottom-2 bg-sawah-100 rounded-3xl rotate-1"></div>
+        
+        <!-- Foto utama -->
+        <div class="relative aspect-[3/4] bg-gradient-to-br from-krem-100 to-sunset-50 rounded-3xl overflow-hidden shadow-xl border-4 border-white">
+          <img 
+            src={petinggi.foto} 
+            alt={`Foto resmi ${petinggi.nama}, ${petinggi.jabatan}`}
+            class="w-full h-full object-cover"
+            loading="lazy"
+            onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+          />
+          <!-- Fallback jika foto belum ada -->
+          <div class="absolute inset-0 hidden flex-col items-center justify-center bg-gradient-to-br from-sunset-100 to-sawah-100 text-tanah-600">
+            <svg class="w-24 h-24 mb-3 opacity-40" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+            </svg>
+            <p class="text-sm font-display">Foto akan ditampilkan</p>
+          </div>
+        </div>
+        
+        <!-- Label nama -->
+        <div class="absolute -bottom-6 left-6 right-6 bg-white rounded-2xl shadow-xl p-4 text-center">
+          <p class="font-display font-bold text-tanah-900 text-lg leading-tight">
+            {petinggi.nama}
+          </p>
+          <p class="text-xs text-sunset-600 font-display font-medium uppercase tracking-wider mt-1">
+            {petinggi.jabatan}
+          </p>
+          <p class="text-xs text-tanah-500 mt-1">
+            Periode {petinggi.periode}
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sambutan -->
+    <div class="lg:col-span-3 order-2">
+      <div class="eyebrow mb-4">Sambutan Petinggi</div>
+      <h2 class="font-headline text-4xl md:text-5xl font-medium text-tanah-900 leading-tight mb-8 text-balance">
+        Dari kampung untuk <span class="highlight-brush">Indonesia</span>.
+      </h2>
+      
+      <div class="prose prose-lg max-w-prose-wide text-tanah-700 space-y-4">
+        <p class="font-headline italic text-sunset-700 text-lg">
+          {petinggi.sambutan.pembuka}
+        </p>
+        <p>{petinggi.sambutan.paragraf1}</p>
+        <p>{petinggi.sambutan.paragraf2}</p>
+        <p>{petinggi.sambutan.paragraf3}</p>
+        <p class="font-medium">{petinggi.sambutan.paragraf4}</p>
+        <p class="font-headline italic text-sunset-700">
+          {petinggi.sambutan.penutup}
+        </p>
+      </div>
+
+      <!-- Signature -->
+      <div class="mt-10 pt-6 border-t border-krem-200">
+        <p class="font-headline text-2xl text-tanah-800 italic">
+          {petinggi.nama}
+        </p>
+        <p class="text-sm text-tanah-500 mt-1">
+          {petinggi.jabatan}
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

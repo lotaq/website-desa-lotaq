@@ -1,0 +1,19 @@
+{
+  "name": "website-kampung-lotaq",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Website Resmi Pemerintah Kampung Lotaq, Kecamatan Muara Lawa, Kabupaten Kutai Barat, Provinsi Kalimantan Timur",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "astro": "^4.16.18",
+    "@astrojs/tailwind": "^5.1.4",
+    "tailwindcss": "^3.4.17",
+    "@tailwindcss/typography": "^0.5.15"
+  }
+}
