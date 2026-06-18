@@ -1,0 +1,175 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+// Ambil semua berita, urut tanggal terbaru
+const allBerita = await getCollection('berita');
+const sortedBerita = allBerita.sort((a, b) => 
+  new Date(b.data.tanggal).valueOf() - new Date(a.data.tanggal).valueOf()
+);
+
+const featuredBerita = sortedBerita.find(b => b.data.featured) || sortedBerita[0];
+const otherBerita = sortedBerita.filter(b => b.slug !== featuredBerita?.slug);
+
+const formatTanggal = (tanggal: Date) => {
+  return new Date(tanggal).toLocaleDateString('id-ID', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric'
+  });
+};
+
+const warnaKategori: Record<string, string> = {
+  'Pemerintahan': 'bg-sunset-100 text-sunset-700',
+  'Pertanian': 'bg-sawah-100 text-sawah-700',
+  'Perkebunan': 'bg-tanah-100 text-tanah-700',
+  'Perikanan': 'bg-sky-100 text-sky-700',
+  'Wisata': 'bg-emas-400/20 text-tanah-700',
+  'UMKM': 'bg-orange-100 text-orange-700',
+  'Pembangunan': 'bg-stone-100 text-stone-700',
+  'Sosial Budaya': 'bg-purple-100 text-purple-700',
+  'PKK': 'bg-pink-100 text-pink-700',
+  'Teknologi': 'bg-blue-100 text-blue-700',
+  'Pemberdayaan': 'bg-sawah-100 text-sawah-700',
+};
+---
+
+<BaseLayout 
+  title="Berita & Kegiatan"
+  description="Berita terbaru, kegiatan, dan kabar dari Pemerintah Kampung Lotaq. Ikuti perkembangan pembangunan, sosial, budaya, dan pemberdayaan masyarakat kampung."
+>
+  <!-- Hero -->
+  <section class="bg-gradient-to-br from-sunset-100 via-krem-100 to-sawah-100 pattern-dayak relative overflow-hidden">
+    <div class="absolute inset-0">
+      <div class="absolute top-10 right-10 w-72 h-72 bg-sunset-300/20 rounded-full blur-3xl"></div>
+      <div class="absolute bottom-10 left-10 w-96 h-96 bg-sawah-400/20 rounded-full blur-3xl"></div>
+    </div>
+    
+    <div class="container-section py-20 md:py-24 relative">
+      <div class="max-w-4xl">
+        <div class="eyebrow mb-4">Berita & Kegiatan</div>
+        <h1 class="headline-display text-tanah-900 mb-6 text-balance">
+          Kabar dari <span class="highlight-brush">kampung</span>.
+        </h1>
+        <p class="text-xl text-tanah-700 leading-relaxed max-w-3xl text-pretty">
+          Cerita, peristiwa, dan kemajuan yang terjadi setiap hari di Kampung Lotaq.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Berita -->
+  {featuredBerita && (
+    <section class="container-section pt-20">
+      <div class="eyebrow mb-6">Berita Utama</div>
+      <a 
+        href={`/berita/${featuredBerita.slug}`}
+        class="group block bg-white border border-krem-200 rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:shadow-sunset-500/10 transition-all duration-500"
+      >
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-0">
+          <!-- Gambar -->
+          <div class="aspect-[4/3] lg:aspect-auto relative bg-gradient-to-br from-sunset-200 to-sawah-200 overflow-hidden">
+            <img 
+              src={featuredBerita.data.gambarUtama}
+              alt={featuredBerita.data.gambarUtamaAlt}
+              class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+              loading="eager"
+              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+            />
+            <div class="absolute inset-0 hidden flex-col items-center justify-center text-tanah-600/40">
+              <svg class="w-24 h-24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Konten -->
+          <div class="p-8 md:p-12 flex flex-col justify-center">
+            <div class="flex items-center gap-3 mb-4">
+              <span class:list={['px-3 py-1 rounded-full text-xs font-display font-semibold', warnaKategori[featuredBerita.data.kategori] || 'bg-krem-100 text-tanah-700']}>
+                {featuredBerita.data.kategori}
+              </span>
+              <time class="text-xs text-tanah-500" datetime={featuredBerita.data.tanggal.toISOString()}>
+                {formatTanggal(featuredBerita.data.tanggal)}
+              </time>
+            </div>
+
+            <h2 class="font-headline text-3xl md:text-4xl font-medium text-tanah-900 leading-tight mb-4 group-hover:text-sunset-700 transition-colors text-balance">
+              {featuredBerita.data.judul}
+            </h2>
+            <p class="text-tanah-600 leading-relaxed mb-6 text-pretty">
+              {featuredBerita.data.ringkasan}
+            </p>
+
+            <div class="inline-flex items-center gap-2 text-sm font-display font-semibold text-sunset-600 group-hover:gap-3 transition-all">
+              Baca selengkapnya
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </a>
+    </section>
+  )}
+
+  <!-- Berita Lainnya -->
+  <section class="container-section py-20">
+    {otherBerita.length > 0 && (
+      <>
+        <div class="eyebrow mb-6">Berita Lainnya</div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {otherBerita.map((berita) => (
+            <a href={`/berita/${berita.slug}`} class="group card-warm flex flex-col h-full">
+              <div class="aspect-[16/10] rounded-2xl bg-gradient-to-br from-sunset-200 to-sawah-200 mb-6 overflow-hidden relative">
+                <img 
+                  src={berita.data.gambarUtama}
+                  alt={berita.data.gambarUtamaAlt}
+                  class="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  loading="lazy"
+                  onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                />
+                <div class="absolute inset-0 hidden flex-col items-center justify-center text-tanah-600/40">
+                  <svg class="w-16 h-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                  </svg>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-3 mb-3">
+                <span class:list={['px-3 py-1 rounded-full text-xs font-display font-semibold', warnaKategori[berita.data.kategori] || 'bg-krem-100 text-tanah-700']}>
+                  {berita.data.kategori}
+                </span>
+                <time class="text-xs text-tanah-500" datetime={berita.data.tanggal.toISOString()}>
+                  {formatTanggal(berita.data.tanggal)}
+                </time>
+              </div>
+
+              <h3 class="font-display font-bold text-xl text-tanah-900 leading-snug mb-3 group-hover:text-sunset-600 transition-colors">
+                {berita.data.judul}
+              </h3>
+              <p class="text-tanah-600 leading-relaxed text-sm flex-1 mb-5">
+                {berita.data.ringkasan}
+              </p>
+
+              <div class="inline-flex items-center gap-2 text-sm font-display font-semibold text-sunset-600 group-hover:gap-3 transition-all">
+                Baca selengkapnya
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                </svg>
+              </div>
+            </a>
+          ))}
+        </div>
+      </>
+    )}
+
+    {sortedBerita.length === 0 && (
+      <div class="bg-krem-100 rounded-2xl p-12 text-center">
+        <div class="text-5xl mb-4">📰</div>
+        <p class="text-tanah-700 font-display font-semibold text-lg mb-2">Belum ada berita</p>
+        <p class="text-tanah-600 text-sm">Berita kegiatan kampung akan segera ditampilkan di sini.</p>
+      </div>
+    )}
+  </section>
+</BaseLayout>
