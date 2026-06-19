@@ -9,9 +9,11 @@ const currentPath = Astro.url.pathname;
     <nav class="flex items-center justify-between h-20" aria-label="Navigasi utama">
       <!-- Logo & Brand -->
       <a href="/" class="flex items-center gap-3 group">
-        <div class="w-12 h-12 rounded-full bg-gradient-sunset flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
-          <span class="text-white font-headline font-bold text-lg" aria-hidden="true">KL</span>
-        </div>
+        <img
+          src="/logo-kutai-barat.png"
+          alt="Lambang Kabupaten Kutai Barat"
+          class="h-14 w-auto group-hover:scale-105 transition-transform"
+        />
         <div class="hidden sm:block">
           <p class="font-display font-bold text-sm text-tanah-800 leading-tight">
             {kampung.namaLengkap}
