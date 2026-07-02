@@ -19,6 +19,32 @@ function inisial(nama: string) {
   if (kata.length === 1) return kata[0].slice(0, 2).toUpperCase();
   return (kata[0][0] + kata[1][0]).toUpperCase();
 }
+
+// Demografi Kampung Lotaq (data tahun 2026)
+const demografi = {
+  tahun: 2026,
+  totalPenduduk: 450,
+  lakiLaki: 235,
+  perempuan: 215,
+  kepalaKeluarga: 156,
+  jumlahRT: 3,
+  luasWilayahHa: 11500,
+  sukuDominan: 'Dayak Benuaq',
+  agama: [
+    { nama: 'Kristen', jumlah: 198 },
+    { nama: 'Katolik', jumlah: 185 },
+    { nama: 'Islam', jumlah: 66 },
+    { nama: 'Hindu', jumlah: 1 },
+  ],
+  mataPencaharian: ['Petani', 'Swasta', 'Peternak', 'Tukang', 'Pedagang', 'PNS'],
+};
+
+// Sejarah Kampung Lotaq (dituturkan sesepuh & tetua kampung)
+const sejarah = [
+  'Menurut penuturan para sesepuh dan tetua Kampung Lotaq, pada masa lampau wilayah ini merupakan lokasi ladang. Lakur — bergelar Jaya Mantitn Tementengk — adalah orang yang pertama kali membuka ladang di kawasan ini, kemudian diikuti oleh warga masyarakat Tementengk. Setelah beliau kembali ke Kampung Tementengk (Kampung Dingin), barulah Kampung Lotaq terbentuk.',
+  'Merujuk pada sejarah Kabupaten Kutai Kartanegara, Daerah Istimewa Kutai pada tahun 1959 dibagi menjadi tiga Daerah Tingkat II, salah satunya Kabupaten Kutai dengan ibu kota Tenggarong. Pada masa itu, Lotaq menjadi bagian dari Kabupaten Kutai.',
+  'Petinggi pertama Kampung Lotaq adalah Kakah Mamih (Ngeon), dan hingga kini tercatat 12 Petinggi (Kepala Kampung) yang telah memimpin. Sejak awal berdirinya, Kampung Lotaq senantiasa menjaga dan mewariskan tradisi leluhur serta adat istiadat suku Dayak Benuaq, yang tetap dipegang teguh dan dilaksanakan oleh seluruh warga.',
+];
 ---
 
 <BaseLayout 
@@ -92,6 +118,95 @@ function inisial(nama: string) {
     </div>
   </section>
 
+  <!-- Sejarah -->
+  <section class="container-section py-20 md:py-28">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+      <div class="lg:col-span-1">
+        <div class="eyebrow mb-4">Sejarah</div>
+        <h2 class="font-headline text-4xl md:text-5xl font-medium text-tanah-900 leading-tight text-balance">
+          Jejak asal-usul Kampung Lotaq.
+        </h2>
+      </div>
+      <div class="lg:col-span-2 space-y-6">
+        {sejarah.map((paragraf) => (
+          <p class="text-lg text-tanah-600 leading-relaxed text-pretty">{paragraf}</p>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Demografi -->
+  <section class="bg-krem-100 py-20 md:py-28">
+    <div class="container-section">
+      <div class="max-w-3xl mb-14">
+        <div class="eyebrow mb-4">Demografi</div>
+        <h2 class="font-headline text-4xl md:text-5xl font-medium text-tanah-900 leading-tight mb-6 text-balance">
+          Potret kependudukan.
+        </h2>
+        <p class="text-lg text-tanah-600 leading-relaxed">
+          Data kependudukan {kampung.namaLengkap} tahun {demografi.tahun}.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-12">
+        {[
+          { label: 'Total Penduduk', nilai: demografi.totalPenduduk.toLocaleString('id-ID'), satuan: 'jiwa' },
+          { label: 'Laki-laki', nilai: demografi.lakiLaki.toLocaleString('id-ID'), satuan: 'jiwa' },
+          { label: 'Perempuan', nilai: demografi.perempuan.toLocaleString('id-ID'), satuan: 'jiwa' },
+          { label: 'Kepala Keluarga', nilai: demografi.kepalaKeluarga.toLocaleString('id-ID'), satuan: 'KK' },
+          { label: 'Rukun Tetangga', nilai: demografi.jumlahRT, satuan: 'RT' },
+          { label: 'Luas Wilayah', nilai: demografi.luasWilayahHa.toLocaleString('id-ID'), satuan: 'Ha' },
+        ].map((s) => (
+          <div class="bg-white rounded-2xl border border-krem-200 p-5 shadow-sm text-center">
+            <div class="font-headline text-3xl font-bold text-sunset-600 tabular-nums">{s.nilai}</div>
+            <div class="text-xs text-tanah-500 mt-1">{s.satuan}</div>
+            <div class="text-sm font-display font-semibold text-tanah-800 mt-2">{s.label}</div>
+          </div>
+        ))}
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-white rounded-3xl border border-krem-200 p-8 shadow-sm">
+          <h3 class="font-display font-bold text-lg text-tanah-900 mb-6">Komposisi Pemeluk Agama</h3>
+          <div class="space-y-4">
+            {demografi.agama.map((a) => {
+              const persen = Math.round((a.jumlah / demografi.totalPenduduk) * 1000) / 10;
+              return (
+                <div>
+                  <div class="flex justify-between text-sm mb-1">
+                    <span class="font-display font-semibold text-tanah-800">{a.nama}</span>
+                    <span class="text-tanah-500 tabular-nums">{a.jumlah} jiwa · {persen}%</span>
+                  </div>
+                  <div class="h-2.5 rounded-full bg-krem-200 overflow-hidden">
+                    <div class="h-full rounded-full bg-gradient-sunset" style={`width: ${persen}%`}></div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <div class="space-y-6">
+          <div class="bg-white rounded-3xl border border-krem-200 p-8 shadow-sm">
+            <h3 class="font-display font-bold text-lg text-tanah-900 mb-4">Mata Pencaharian Utama</h3>
+            <ol class="space-y-2">
+              {demografi.mataPencaharian.map((mp, i) => (
+                <li class="flex items-center gap-3">
+                  <span class="w-6 h-6 shrink-0 rounded-full bg-sunset-100 text-sunset-700 font-display font-bold text-xs flex items-center justify-center tabular-nums">{i + 1}</span>
+                  <span class="text-tanah-700 font-display">{mp}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+          <div class="bg-gradient-sunset rounded-3xl p-8 shadow-sm text-white">
+            <div class="text-xs uppercase tracking-wider font-display font-semibold text-white/80 mb-1">Suku / Etnis Dominan</div>
+            <div class="font-headline text-3xl font-bold">{demografi.sukuDominan}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Visi -->
   <section class="bg-gradient-sunset py-20 md:py-24 relative overflow-hidden">
     <div class="absolute inset-0 pattern-dayak opacity-50"></div>
@@ -155,7 +270,6 @@ function inisial(nama: string) {
         </p>
       </div>
 
-      <!-- Bagan Struktur Organisasi (dokumen resmi) -->
       <div class="mb-20">
         <h3 class="font-display font-bold text-xl text-tanah-900 mb-6 pb-3 border-b border-krem-200">
           Bagan Struktur Organisasi
@@ -170,7 +284,6 @@ function inisial(nama: string) {
         </div>
       </div>
 
-      <!-- Aparatur Kampung (carousel) -->
       <div data-carousel-wrap>
         <div class="flex items-center justify-between mb-6 pb-3 border-b border-krem-200">
           <h3 class="font-display font-bold text-xl text-tanah-900">Aparatur Kampung</h3>
