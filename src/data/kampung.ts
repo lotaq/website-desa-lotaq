@@ -82,8 +82,8 @@ export const potensiUnggulan = [
 ];
 
 export const statistik = [
-  { label: 'Penduduk', nilai: '—', satuan: 'jiwa', icon: '👥', catatan: 'Data dalam pemutakhiran' },
-  { label: 'Kepala Keluarga', nilai: '—', satuan: 'KK', icon: '🏠', catatan: 'Data dalam pemutakhiran' },
+  { label: 'Penduduk', nilai: '450', satuan: 'jiwa', icon: '👥', catatan: 'Data tahun 2026' },
+  { label: 'Kepala Keluarga', nilai: '156', satuan: 'KK', icon: '🏠', catatan: 'Data tahun 2026' },
   { label: 'Potensi Unggulan', nilai: '4', satuan: 'sektor', icon: '🌾', catatan: 'Wisata, Tani, Kebun, Ikan' },
   { label: 'Periode Petinggi', nilai: '2021-2029', satuan: '', icon: '🏛️', catatan: 'KARYA MUSNI. Y' }
 ];
