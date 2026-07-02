@@ -1,6 +1,24 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { kampung, petinggi, visiMisi } from '../data/kampung';
+
+// Aparatur Pemerintah Kampung Lotaq (sesuai Bagan Struktur Organisasi resmi)
+const aparatur = [
+  { jabatan: 'Kepala Kampung', nama: 'KARYA MUSNI. Y', foto: petinggi.foto },
+  { jabatan: 'Sekretaris Kampung', nama: 'YATI. M, S.Pd', foto: '/sotk-yati.jpg' },
+  { jabatan: 'Kasi Pemerintahan', nama: 'SARNI', foto: '/sotk-sarni.jpg' },
+  { jabatan: 'Kasi Kesejahteraan dan Pelayanan', nama: 'YULFIA HANDAYANI', foto: '/sotk-yulfia.jpg' },
+  { jabatan: 'Kaur Umum dan Perencanaan', nama: 'DIAN NENSY OCTAVIA', foto: '/sotk-dian.jpg' },
+  { jabatan: 'Kaur Keuangan', nama: 'IKA RAHAYU', foto: '/sotk-ika.jpg' },
+];
+
+function inisial(nama: string) {
+  const bersih = nama.replace(/[.,]/g, ' ').replace(/\bS\s*Pd\b/gi, '').trim();
+  const kata = bersih.split(/\s+/).filter(Boolean);
+  if (kata.length === 0) return '-';
+  if (kata.length === 1) return kata[0].slice(0, 2).toUpperCase();
+  return (kata[0][0] + kata[1][0]).toUpperCase();
+}
 ---
 
 <BaseLayout 
@@ -123,48 +141,84 @@ import { kampung, petinggi, visiMisi } from '../data/kampung';
     </div>
   </section>
 
-  <!-- Pemerintahan -->
+  <!-- Struktur Organisasi & Aparatur -->
   <section class="bg-krem-100 py-20 md:py-28">
     <div class="container-section">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        <div>
-          <div class="eyebrow mb-4">Pemerintahan</div>
-          <h2 class="font-headline text-4xl md:text-5xl font-medium text-tanah-900 leading-tight mb-6 text-balance">
-            Pemimpin yang melayani.
-          </h2>
-          <p class="text-lg text-tanah-600 leading-relaxed mb-8">
-            Pemerintahan Kampung Lotaq dipimpin oleh Petinggi Kampung yang dipilih melalui mekanisme yang sah, 
-            didukung oleh aparatur dan Badan Permusyawaratan Kampung (BPK).
-          </p>
+      <div class="max-w-3xl mb-14">
+        <div class="eyebrow mb-4">Pemerintahan</div>
+        <h2 class="font-headline text-4xl md:text-5xl font-medium text-tanah-900 leading-tight mb-6 text-balance">
+          Struktur Organisasi &amp; Aparatur.
+        </h2>
+        <p class="text-lg text-tanah-600 leading-relaxed">
+          Susunan Organisasi dan Tata Kerja (SOTK) {kampung.namaLengkap}, dipimpin oleh Petinggi Kampung
+          bersama Sekretaris Kampung, Kepala Seksi, dan Kepala Urusan.
+        </p>
+      </div>
 
-          <div class="bg-white rounded-2xl p-6 border border-krem-200 shadow-sm">
-            <p class="text-xs uppercase tracking-wider font-display font-semibold text-sunset-600 mb-2">
-              Petinggi Kampung Saat Ini
-            </p>
-            <p class="font-headline text-3xl font-bold text-tanah-900">
-              {petinggi.nama}
-            </p>
-            <p class="text-sm text-tanah-500 mt-2">
-              Periode {petinggi.periode}
-            </p>
+      <!-- Bagan Struktur Organisasi (dokumen resmi) -->
+      <div class="mb-20">
+        <h3 class="font-display font-bold text-xl text-tanah-900 mb-6 pb-3 border-b border-krem-200">
+          Bagan Struktur Organisasi
+        </h3>
+        <div class="bg-white rounded-3xl border border-krem-200 shadow-sm p-4 sm:p-8">
+          <img
+            src="/sotk-bagan.jpg"
+            alt={`Bagan Struktur Organisasi ${kampung.namaLengkap}`}
+            loading="lazy"
+            class="w-full h-auto max-w-3xl mx-auto rounded-xl"
+          />
+        </div>
+      </div>
+
+      <!-- Aparatur Kampung (carousel) -->
+      <div data-carousel-wrap>
+        <div class="flex items-center justify-between mb-6 pb-3 border-b border-krem-200">
+          <h3 class="font-display font-bold text-xl text-tanah-900">Aparatur Kampung</h3>
+          <div class="flex gap-2">
+            <button data-prev type="button" aria-label="Sebelumnya"
+              class="w-10 h-10 rounded-full bg-white border border-krem-200 shadow-sm flex items-center justify-center text-tanah-700 hover:bg-sunset-500 hover:text-white hover:border-sunset-500 transition-colors">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+            </button>
+            <button data-next type="button" aria-label="Berikutnya"
+              class="w-10 h-10 rounded-full bg-white border border-krem-200 shadow-sm flex items-center justify-center text-tanah-700 hover:bg-sunset-500 hover:text-white hover:border-sunset-500 transition-colors">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </button>
           </div>
         </div>
 
-        <div class="relative aspect-square max-w-md mx-auto lg:ml-auto">
-          <div class="absolute inset-0 bg-gradient-sunset rounded-3xl rotate-3"></div>
-          <div class="absolute inset-0 bg-white rounded-3xl shadow-2xl -rotate-2 flex items-center justify-center">
-            <div class="text-center p-10">
-              <div class="text-6xl mb-4">🏛️</div>
-              <p class="font-headline text-2xl font-bold text-tanah-900 mb-2">
-                Pemerintah Kampung
-              </p>
-              <p class="text-sm text-tanah-500">
-                Struktur lengkap akan ditampilkan di sini
-              </p>
+        <div data-carousel class="flex gap-5 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-4 -mx-1 px-1">
+          {aparatur.map((orang) => (
+            <div class="snap-start shrink-0 w-56 sm:w-60">
+              <div class="relative aspect-[3/4] rounded-2xl overflow-hidden border-2 border-sunset-500 shadow-md bg-krem-100">
+                <img
+                  src={orang.foto}
+                  alt={`Foto ${orang.nama}`}
+                  loading="lazy"
+                  class="absolute inset-0 w-full h-full object-cover"
+                  onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+                />
+                <div class="absolute inset-0 hidden items-center justify-center bg-gradient-sunset">
+                  <span class="font-headline text-5xl font-bold text-white">{inisial(orang.nama)}</span>
+                </div>
+                <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent pt-12 pb-4 px-3 text-center">
+                  <p class="text-sunset-200 text-[11px] font-display font-semibold uppercase tracking-wide leading-tight">{orang.jabatan}</p>
+                  <p class="text-white font-display font-bold text-sm leading-tight mt-1">{orang.nama}</p>
+                </div>
+              </div>
             </div>
-          </div>
+          ))}
         </div>
       </div>
     </div>
   </section>
+
+  <script>
+    document.querySelectorAll('[data-carousel-wrap]').forEach((wrap) => {
+      const track = wrap.querySelector('[data-carousel]') as HTMLElement | null;
+      if (!track) return;
+      const step = () => Math.max(track.clientWidth * 0.8, 240);
+      wrap.querySelector('[data-prev]')?.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
+      wrap.querySelector('[data-next]')?.addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
+    });
+  </script>
 </BaseLayout>
