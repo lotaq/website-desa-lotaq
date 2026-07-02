@@ -62,8 +62,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
   <meta property="twitter:image" content={new URL(image, Astro.site).toString()} />
   
   <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  
+<link rel="icon" type="image/png" href="/favicon.png" />  
   <!-- Structured Data: Government Organization -->
   <script type="application/ld+json" set:html={JSON.stringify({
     "@context": "https://schema.org",
