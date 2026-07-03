@@ -18,11 +18,11 @@ const kelembagaan = [
     kategori: 'Unsur Permusyawaratan',
     deskripsi: 'Menjalankan fungsi permusyawaratan dan pengawasan penyelenggaraan pemerintahan kampung.',
     anggota: [
-      { nama: 'LAHMADI', jabatan: 'Ketua' },
-      { nama: 'SYARIFUDDIN', jabatan: 'Wakil Ketua' },
-      { nama: 'YOHANES LATIH', jabatan: 'Sekretaris' },
-      { nama: 'LUSIA RANIA ROSEVA', jabatan: 'Anggota' },
-      { nama: 'RENI SUTILA', jabatan: 'Anggota' },
+      { nama: 'LAHMADI', jabatan: 'Ketua', foto: '/kel-bpk-lahmadi.jpg' },
+      { nama: 'SYARIFUDDIN', jabatan: 'Wakil Ketua', foto: '/kel-bpk-syarifuddin.jpg' },
+      { nama: 'YOHANES LATIH', jabatan: 'Sekretaris', foto: '/kel-bpk-yohanes.jpg' },
+      { nama: 'LUSIA RANIA ROSEVA', jabatan: 'Anggota', foto: '/kel-bpk-lusia.jpg' },
+      { nama: 'RENI SUTILA', jabatan: 'Anggota', foto: '/kel-bpk-reni.jpg' },
     ],
   },
   {
@@ -193,8 +193,17 @@ const totalPersonel = kelembagaan.reduce((n, l) => {
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {grup.anggota.map((orang) => (
                     <div class="bg-white rounded-2xl border border-krem-200 p-4 shadow-sm flex items-center gap-4">
-                      <div class="w-14 h-14 rounded-full bg-gradient-sunset flex items-center justify-center shrink-0">
+                      <div class="w-14 h-14 rounded-full bg-gradient-sunset flex items-center justify-center shrink-0 overflow-hidden relative">
                         <span class="font-headline text-lg font-bold text-white">{inisial(orang.nama)}</span>
+                        {orang.foto && (
+                          <img
+                            src={orang.foto}
+                            alt={`Foto ${orang.nama}`}
+                            loading="lazy"
+                            class="absolute inset-0 w-full h-full object-cover"
+                            onerror="this.style.display='none';"
+                          />
+                        )}
                       </div>
                       <div class="min-w-0">
                         <p class="font-display font-bold text-sm text-tanah-900 leading-tight">{orang.nama}</p>
@@ -210,8 +219,17 @@ const totalPersonel = kelembagaan.reduce((n, l) => {
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {lembaga.anggota.map((orang) => (
               <div class="bg-white rounded-2xl border border-krem-200 p-4 shadow-sm flex items-center gap-4">
-                <div class="w-14 h-14 rounded-full bg-gradient-sunset flex items-center justify-center shrink-0">
+                <div class="w-14 h-14 rounded-full bg-gradient-sunset flex items-center justify-center shrink-0 overflow-hidden relative">
                   <span class="font-headline text-lg font-bold text-white">{inisial(orang.nama)}</span>
+                  {orang.foto && (
+                    <img
+                      src={orang.foto}
+                      alt={`Foto ${orang.nama}`}
+                      loading="lazy"
+                      class="absolute inset-0 w-full h-full object-cover"
+                      onerror="this.style.display='none';"
+                    />
+                  )}
                 </div>
                 <div class="min-w-0">
                   <p class="font-display font-bold text-sm text-tanah-900 leading-tight">{orang.nama}</p>
