@@ -193,8 +193,8 @@ const totalPersonel = kelembagaan.reduce((n, l) => {
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {grup.anggota.map((orang) => (
                     <div class="bg-white rounded-2xl border border-krem-200 p-4 shadow-sm flex items-center gap-4">
-                      <div class="w-14 h-14 rounded-full bg-gradient-sunset flex items-center justify-center shrink-0 overflow-hidden relative">
-                        <span class="font-headline text-lg font-bold text-white">{inisial(orang.nama)}</span>
+                      <div class="w-20 h-20 rounded-full bg-gradient-sunset flex items-center justify-center shrink-0 overflow-hidden relative">
+                        <span class="font-headline text-2xl font-bold text-white">{inisial(orang.nama)}</span>
                         {orang.foto && (
                           <img
                             src={orang.foto}
@@ -219,8 +219,8 @@ const totalPersonel = kelembagaan.reduce((n, l) => {
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {lembaga.anggota.map((orang) => (
               <div class="bg-white rounded-2xl border border-krem-200 p-4 shadow-sm flex items-center gap-4">
-                <div class="w-14 h-14 rounded-full bg-gradient-sunset flex items-center justify-center shrink-0 overflow-hidden relative">
-                  <span class="font-headline text-lg font-bold text-white">{inisial(orang.nama)}</span>
+                <div class="w-20 h-20 rounded-full bg-gradient-sunset flex items-center justify-center shrink-0 overflow-hidden relative">
+                  <span class="font-headline text-2xl font-bold text-white">{inisial(orang.nama)}</span>
                   {orang.foto && (
                     <img
                       src={orang.foto}
