@@ -150,6 +150,7 @@ export const beritaContoh = [
 export const navigasi = [
   { label: 'Beranda', href: '/' },
   { label: 'Profil', href: '/profil' },
+  { label: 'Kelembagaan', href: '/kelembagaan' },
   { label: 'Potensi', href: '/potensi' },
   { label: 'Berita', href: '/berita' },
   { label: 'Kontak', href: '/kontak' }
