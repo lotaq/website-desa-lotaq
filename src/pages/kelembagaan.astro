@@ -190,24 +190,24 @@ const totalPersonel = kelembagaan.reduce((n, l) => {
                 <h3 class="font-display font-bold text-lg text-sunset-700 mb-4 pb-2 border-b border-krem-200">
                   {grup.judul}
                 </h3>
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                   {grup.anggota.map((orang) => (
-                    <div class="bg-white rounded-2xl border border-krem-200 p-4 shadow-sm flex items-center gap-4">
-                      <div class="w-20 h-20 rounded-full bg-gradient-sunset flex items-center justify-center shrink-0 overflow-hidden relative">
-                        <span class="font-headline text-2xl font-bold text-white">{inisial(orang.nama)}</span>
-                        {orang.foto && (
-                          <img
-                            src={orang.foto}
-                            alt={`Foto ${orang.nama}`}
-                            loading="lazy"
-                            class="absolute inset-0 w-full h-full object-cover"
-                            onerror="this.style.display='none';"
-                          />
-                        )}
+                    <div class="relative aspect-[3/4] rounded-2xl overflow-hidden border-2 border-sunset-500 shadow-md bg-krem-100">
+                      <div class="absolute inset-0 flex items-center justify-center bg-gradient-sunset">
+                        <span class="font-headline text-4xl font-bold text-white">{inisial(orang.nama)}</span>
                       </div>
-                      <div class="min-w-0">
-                        <p class="font-display font-bold text-sm text-tanah-900 leading-tight">{orang.nama}</p>
-                        <p class="text-xs text-tanah-500 mt-0.5 leading-tight">{orang.jabatan}</p>
+                      {orang.foto && (
+                        <img
+                          src={orang.foto}
+                          alt={`Foto ${orang.nama}`}
+                          loading="lazy"
+                          class="absolute inset-0 w-full h-full object-cover"
+                          onerror="this.style.display='none';"
+                        />
+                      )}
+                      <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent pt-12 pb-4 px-3 text-center">
+                        <p class="text-sunset-200 text-[11px] font-display font-semibold uppercase tracking-wide leading-tight">{orang.jabatan}</p>
+                        <p class="text-white font-display font-bold text-sm leading-tight mt-1">{orang.nama}</p>
                       </div>
                     </div>
                   ))}
@@ -216,24 +216,24 @@ const totalPersonel = kelembagaan.reduce((n, l) => {
             ))}
           </div>
         ) : (
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
             {lembaga.anggota.map((orang) => (
-              <div class="bg-white rounded-2xl border border-krem-200 p-4 shadow-sm flex items-center gap-4">
-                <div class="w-20 h-20 rounded-full bg-gradient-sunset flex items-center justify-center shrink-0 overflow-hidden relative">
-                  <span class="font-headline text-2xl font-bold text-white">{inisial(orang.nama)}</span>
-                  {orang.foto && (
-                    <img
-                      src={orang.foto}
-                      alt={`Foto ${orang.nama}`}
-                      loading="lazy"
-                      class="absolute inset-0 w-full h-full object-cover"
-                      onerror="this.style.display='none';"
-                    />
-                  )}
+              <div class="relative aspect-[3/4] rounded-2xl overflow-hidden border-2 border-sunset-500 shadow-md bg-krem-100">
+                <div class="absolute inset-0 flex items-center justify-center bg-gradient-sunset">
+                  <span class="font-headline text-4xl font-bold text-white">{inisial(orang.nama)}</span>
                 </div>
-                <div class="min-w-0">
-                  <p class="font-display font-bold text-sm text-tanah-900 leading-tight">{orang.nama}</p>
-                  <p class="text-xs text-tanah-500 mt-0.5 leading-tight">{orang.jabatan}</p>
+                {orang.foto && (
+                  <img
+                    src={orang.foto}
+                    alt={`Foto ${orang.nama}`}
+                    loading="lazy"
+                    class="absolute inset-0 w-full h-full object-cover"
+                    onerror="this.style.display='none';"
+                  />
+                )}
+                <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent pt-12 pb-4 px-3 text-center">
+                  <p class="text-sunset-200 text-[11px] font-display font-semibold uppercase tracking-wide leading-tight">{orang.jabatan}</p>
+                  <p class="text-white font-display font-bold text-sm leading-tight mt-1">{orang.nama}</p>
                 </div>
               </div>
             ))}
