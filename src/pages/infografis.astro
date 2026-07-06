@@ -62,6 +62,33 @@ const idm = {
 };
 const maxDim = Math.max(...idm.dimensi.map((d) => d.skor));
 
+// APB Kampung (APBKam) 2026 — Perkam Nomor 21 Tahun 2025
+const rp = (n: number) => 'Rp' + n.toLocaleString('id-ID');
+const apbdes = {
+  tahun: 2026,
+  pendapatan: 1234718773,
+  belanja: 1234718773,
+  pendapatanRinci: [
+    { nama: 'Pendapatan Asli Kampung', jumlah: 0 },
+    { nama: 'Pendapatan Transfer', jumlah: 1234718773 },
+    { nama: 'Pendapatan Lain-lain', jumlah: 0 },
+  ],
+  belanjaBidang: [
+    { nama: 'Penyelenggaraan Pemerintahan', jumlah: 800363711 },
+    { nama: 'Pelaksanaan Pembangunan', jumlah: 294176752 },
+    { nama: 'Pembinaan Kemasyarakatan', jumlah: 74383630 },
+    { nama: 'Penanggulangan Bencana & Mendesak', jumlah: 39648000 },
+    { nama: 'Pemberdayaan Masyarakat', jumlah: 26146680 },
+  ],
+  prioritas: [
+    { nama: 'Posyandu & Kesehatan', jumlah: 97023277 },
+    { nama: 'Jalan Lingkungan Permukiman', jumlah: 87397421 },
+    { nama: 'PAUD', jumlah: 65370273 },
+    { nama: 'Pembinaan PKK', jumlah: 41845558 },
+    { nama: 'Ketahanan Pangan (Lumbung)', jumlah: 7146680 },
+  ],
+};
+const maxBidang = Math.max(...apbdes.belanjaBidang.map((b) => b.jumlah));
 const tabs = [
   { kode: 'penduduk', label: 'Penduduk', icon: 'M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z' },
   { kode: 'apbdes', label: 'APBDes', icon: 'M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z' },
@@ -73,7 +100,7 @@ const tabs = [
 const iconOf = (kode: string) => tabs.find((t) => t.kode === kode)?.icon ?? '';
 
 const pending = [
-  { kode: 'apbdes', kategori: 'Keuangan', judul: 'APB Kampung (APBDes)', deskripsi: 'Ringkasan Pendapatan, Belanja, dan Pembiayaan kampung secara transparan.', sumber: 'Struktur mengacu Permendagri Nomor 20 Tahun 2018' },
+  
   { kode: 'stunting', kategori: 'Kesehatan', judul: 'Stunting', deskripsi: 'Prevalensi dan upaya penanganan stunting pada balita.', sumber: 'Sumber: e-PPGBM / Puskesmas' },
   { kode: 'bansos', kategori: 'Kesejahteraan', judul: 'Bantuan Sosial', deskripsi: 'Data penerima manfaat program bantuan sosial.', sumber: 'Sumber: DTKS (Kementerian Sosial)' },
   { kode: 'sdgs', kategori: 'Pembangunan Berkelanjutan', judul: 'SDGs Desa', deskripsi: 'Capaian 18 tujuan pembangunan berkelanjutan tingkat desa.', sumber: 'Sumber: SID / Prodeskel' },
@@ -272,7 +299,83 @@ const pending = [
       </div>
     </section>
   </div>
+<!-- PANEL: APBDes -->
+  <div data-panel="apbdes" class="hidden">
+    <section class="container-section py-16 md:py-20">
+      <div class="max-w-3xl mb-10">
+        <div class="eyebrow mb-3">Keuangan</div>
+        <h2 class="font-headline text-3xl md:text-4xl font-medium text-tanah-900 leading-tight mb-4 text-balance">APB Kampung {apbdes.tahun}.</h2>
+        <p class="text-base text-tanah-600 leading-relaxed">Anggaran Pendapatan dan Belanja Kampung Lotaq Tahun {apbdes.tahun}, ditetapkan melalui Peraturan Kampung Nomor 21 Tahun 2025.</p>
+      </div>
 
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        <div class="bg-white rounded-3xl border border-krem-200 shadow-sm p-8">
+          <div class="text-xs uppercase tracking-wider font-display font-semibold text-sawah-600 mb-2">Pendapatan</div>
+          <div class="font-headline text-2xl md:text-3xl font-bold text-tanah-900 tabular-nums">{rp(apbdes.pendapatan)}</div>
+        </div>
+        <div class="bg-white rounded-3xl border border-krem-200 shadow-sm p-8">
+          <div class="text-xs uppercase tracking-wider font-display font-semibold text-sunset-600 mb-2">Belanja</div>
+          <div class="font-headline text-2xl md:text-3xl font-bold text-tanah-900 tabular-nums">{rp(apbdes.belanja)}</div>
+        </div>
+        <div class="bg-gradient-sunset rounded-3xl shadow-sm p-8 text-white">
+          <div class="text-xs uppercase tracking-wider font-display font-semibold text-white/80 mb-2">Surplus / Defisit</div>
+          <div class="font-headline text-2xl md:text-3xl font-bold">Berimbang</div>
+          <p class="text-sm text-white/80 mt-1">Rp0 — Pendapatan = Belanja</p>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-3xl border border-krem-200 shadow-sm p-8 mb-8">
+        <h3 class="font-display font-bold text-lg text-tanah-900 mb-6">Belanja per Bidang</h3>
+        <div class="space-y-5">
+          {apbdes.belanjaBidang.map((b) => (
+            <div>
+              <div class="flex flex-wrap justify-between items-baseline gap-x-3 gap-y-1 mb-1">
+                <span class="font-display font-semibold text-sm text-tanah-800">{b.nama}</span>
+                <span class="text-tanah-500 tabular-nums text-sm">{rp(b.jumlah)} · {((b.jumlah / apbdes.belanja) * 100).toFixed(1).replace('.', ',')}%</span>
+              </div>
+              <div class="h-3 rounded-full bg-krem-200 overflow-hidden">
+                <div class="h-full rounded-full bg-gradient-sunset" style={`width:${(b.jumlah / maxBidang) * 100}%`}></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-white rounded-3xl border border-krem-200 shadow-sm p-8">
+          <h3 class="font-display font-bold text-lg text-tanah-900 mb-6">Struktur Pendapatan</h3>
+          <div class="space-y-4">
+            {apbdes.pendapatanRinci.map((pd) => (
+              <div>
+                <div class="flex justify-between text-sm mb-1">
+                  <span class="font-display font-semibold text-tanah-800">{pd.nama}</span>
+                  <span class="text-tanah-500 tabular-nums">{rp(pd.jumlah)}</span>
+                </div>
+                <div class="h-2.5 rounded-full bg-krem-200 overflow-hidden">
+                  <div class="h-full rounded-full bg-sawah-600" style={`width:${apbdes.pendapatan ? (pd.jumlah / apbdes.pendapatan) * 100 : 0}%`}></div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <p class="text-xs text-tanah-500 mt-4">Pendapatan bersumber sepenuhnya dari dana transfer (Alokasi Dana Desa &amp; Dana Desa).</p>
+        </div>
+
+        <div class="bg-white rounded-3xl border border-krem-200 shadow-sm p-8">
+          <h3 class="font-display font-bold text-lg text-tanah-900 mb-6">Program Prioritas</h3>
+          <ul class="divide-y divide-krem-200">
+            {apbdes.prioritas.map((pr) => (
+              <li class="flex justify-between items-baseline gap-3 py-2.5">
+                <span class="text-sm text-tanah-700">{pr.nama}</span>
+                <span class="text-sm font-display font-semibold text-tanah-900 tabular-nums whitespace-nowrap">{rp(pr.jumlah)}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <p class="text-xs text-tanah-400 mt-8 text-center">Sumber: APB Kampung Lotaq TA {apbdes.tahun} (Peraturan Kampung Nomor 21 Tahun 2025). Nilai dalam Rupiah.</p>
+    </section>
+  </div>
   <!-- PANEL: modul dalam pemutakhiran -->
   {pending.map((m) => (
     <div data-panel={m.kode} class="hidden">
