@@ -1,0 +1,240 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { kampung } from '../data/kampung';
+
+// Data kependudukan Kampung Lotaq (tahun 2026) — sumber: Pemerintah Kampung Lotaq
+const TAHUN = 2026;
+const ringkasan = { total: 450, lakiLaki: 235, perempuan: 215, kk: 156 };
+const rasioJK = Math.round((ringkasan.lakiLaki / ringkasan.perempuan) * 100);
+
+const usia = [
+  { band: '0–5', l: 26, p: 22 },
+  { band: '5–10', l: 16, p: 22 },
+  { band: '11–15', l: 19, p: 22 },
+  { band: '16–20', l: 18, p: 19 },
+  { band: '21–25', l: 25, p: 25 },
+  { band: '26–30', l: 19, p: 11 },
+  { band: '31–35', l: 23, p: 21 },
+  { band: '36–40', l: 15, p: 12 },
+  { band: '41–45', l: 16, p: 16 },
+  { band: '46–50', l: 16, p: 17 },
+  { band: '51–55', l: 17, p: 10 },
+  { band: '56–60', l: 11, p: 4 },
+  { band: '61–65', l: 6, p: 8 },
+  { band: '66–70', l: 3, p: 2 },
+  { band: '71–75', l: 3, p: 4 },
+  { band: '76+', l: 2, p: 0 },
+];
+const maxUsia = Math.max(...usia.flatMap((u) => [u.l, u.p]));
+
+const agama = [
+  { nama: 'Kristen', jumlah: 198 },
+  { nama: 'Katolik', jumlah: 185 },
+  { nama: 'Islam', jumlah: 66 },
+  { nama: 'Hindu', jumlah: 1 },
+];
+
+const pendidikan = [
+  { nama: 'Tamat SLTA', jumlah: 116 },
+  { nama: 'Tamat SD', jumlah: 73 },
+  { nama: 'Tamat SLTP', jumlah: 55 },
+  { nama: 'Tamat S1', jumlah: 14 },
+  { nama: 'Tamat D3', jumlah: 4 },
+  { nama: 'Tamat D1', jumlah: 1 },
+  { nama: 'Tamat D2', jumlah: 1 },
+  { nama: 'Tamat S2', jumlah: 1 },
+  { nama: 'Tamat S3', jumlah: 0 },
+];
+const maxPendidikan = Math.max(...pendidikan.map((x) => x.jumlah));
+
+const pekerjaan = [
+  { nama: 'Petani', jumlah: 50 },
+  { nama: 'Swasta', jumlah: 50 },
+  { nama: 'Lain-lain', jumlah: 50 },
+  { nama: 'Peternak', jumlah: 20 },
+  { nama: 'Pedagang', jumlah: 10 },
+  { nama: 'Tukang', jumlah: 10 },
+  { nama: 'PNS', jumlah: 4 },
+  { nama: 'Pensiunan', jumlah: 4 },
+  { nama: 'Buruh Tani', jumlah: 3 },
+  { nama: 'TNI / POLRI', jumlah: 0 },
+];
+const maxPekerjaan = Math.max(...pekerjaan.map((x) => x.jumlah));
+
+const persenP = (n: number) => ((n / ringkasan.total) * 100).toFixed(1).replace('.', ',');
+const kartuRingkasan = [
+  { label: 'Total Penduduk', nilai: ringkasan.total, satuan: 'jiwa' },
+  { label: 'Laki-laki', nilai: ringkasan.lakiLaki, satuan: 'jiwa' },
+  { label: 'Perempuan', nilai: ringkasan.perempuan, satuan: 'jiwa' },
+  { label: 'Kepala Keluarga', nilai: ringkasan.kk, satuan: 'KK' },
+];
+---
+
+<BaseLayout
+  title="Infografis Kependudukan"
+  description={`Infografis data kependudukan ${kampung.namaLengkap} tahun ${TAHUN}: piramida penduduk, agama, pendidikan, dan mata pencaharian.`}
+>
+  <!-- Hero -->
+  <section class="bg-gradient-to-br from-tanah-100 via-krem-100 to-sunset-50 pattern-dayak relative overflow-hidden">
+    <div class="absolute top-10 right-10 w-72 h-72 bg-sunset-300/20 rounded-full blur-3xl"></div>
+    <div class="container-section py-20 md:py-24 relative">
+      <div class="max-w-4xl">
+        <div class="eyebrow mb-4">Infografis</div>
+        <h1 class="headline-display text-tanah-900 mb-6 text-balance">
+          Kampung Lotaq dalam <span class="highlight-brush">angka</span>.
+        </h1>
+        <p class="text-xl text-tanah-700 leading-relaxed max-w-3xl text-pretty">
+          Potret kependudukan {kampung.namaLengkap} tahun {TAHUN} — disajikan transparan
+          sebagai dasar perencanaan pembangunan dan pelayanan publik.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ringkasan -->
+  <section class="container-section py-16 md:py-20">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      {kartuRingkasan.map((s) => (
+        <div class="bg-white rounded-2xl border border-krem-200 p-6 shadow-sm text-center">
+          <div class="font-headline text-4xl font-bold text-sunset-600 tabular-nums">{s.nilai.toLocaleString('id-ID')}</div>
+          <div class="text-xs text-tanah-500 mt-1">{s.satuan}</div>
+          <div class="text-sm font-display font-semibold text-tanah-800 mt-2">{s.label}</div>
+        </div>
+      ))}
+    </div>
+
+    <div class="mt-10 bg-white rounded-3xl border border-krem-200 shadow-sm p-8">
+      <div class="flex flex-wrap items-baseline justify-between gap-2 mb-4">
+        <h2 class="font-display font-bold text-lg text-tanah-900">Komposisi Jenis Kelamin</h2>
+        <span class="text-sm text-tanah-500">Rasio {rasioJK} laki-laki per 100 perempuan</span>
+      </div>
+      <div class="flex h-12 rounded-2xl overflow-hidden text-white font-display font-bold text-sm">
+        <div class="bg-sunset-500 flex items-center justify-center" style={`width:${persenP(ringkasan.lakiLaki)}%`}>
+          {persenP(ringkasan.lakiLaki)}%
+        </div>
+        <div class="bg-sawah-600 flex items-center justify-center" style={`width:${persenP(ringkasan.perempuan)}%`}>
+          {persenP(ringkasan.perempuan)}%
+        </div>
+      </div>
+      <div class="flex gap-6 mt-3 text-sm text-tanah-600">
+        <span class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-sunset-500"></span>Laki-laki ({ringkasan.lakiLaki})</span>
+        <span class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-sawah-600"></span>Perempuan ({ringkasan.perempuan})</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Piramida Penduduk -->
+  <section class="bg-krem-100 py-16 md:py-24">
+    <div class="container-section">
+      <div class="max-w-3xl mb-10">
+        <div class="eyebrow mb-3">Struktur Usia</div>
+        <h2 class="font-headline text-3xl md:text-4xl font-medium text-tanah-900 leading-tight mb-4 text-balance">
+          Piramida Penduduk.
+        </h2>
+        <p class="text-base text-tanah-600 leading-relaxed">
+          Distribusi penduduk menurut kelompok umur dan jenis kelamin — menunjukkan struktur usia produktif
+          dan ketergantungan.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-3xl border border-krem-200 shadow-sm p-5 sm:p-8">
+        <div class="flex items-center justify-center gap-8 mb-6 text-sm font-display font-semibold">
+          <span class="flex items-center gap-2 text-tanah-700"><span class="w-3 h-3 rounded-sm bg-sunset-500"></span>Laki-laki</span>
+          <span class="flex items-center gap-2 text-tanah-700"><span class="w-3 h-3 rounded-sm bg-sawah-600"></span>Perempuan</span>
+        </div>
+
+        <div class="space-y-1.5">
+          {usia.map((u) => (
+            <div class="flex items-center gap-2 sm:gap-3">
+              <div class="flex-1 flex items-center justify-end gap-1.5">
+                <span class="text-[10px] tabular-nums text-tanah-500 w-5 text-right">{u.l}</span>
+                <div class="h-4 rounded-l bg-sunset-500 min-w-[2px]" style={`width:${(u.l / maxUsia) * 100}%`}></div>
+              </div>
+              <div class="w-12 shrink-0 text-center text-[11px] font-mono text-tanah-600">{u.band}</div>
+              <div class="flex-1 flex items-center justify-start gap-1.5">
+                <div class="h-4 rounded-r bg-sawah-600 min-w-[2px]" style={`width:${(u.p / maxUsia) * 100}%`}></div>
+                <span class="text-[10px] tabular-nums text-tanah-500 w-5">{u.p}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Agama & Pendidikan -->
+  <section class="container-section py-16 md:py-20">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div class="bg-white rounded-3xl border border-krem-200 shadow-sm p-8">
+        <h2 class="font-display font-bold text-lg text-tanah-900 mb-6">Komposisi Pemeluk Agama</h2>
+        <div class="space-y-4">
+          {agama.map((a) => (
+            <div>
+              <div class="flex justify-between text-sm mb-1">
+                <span class="font-display font-semibold text-tanah-800">{a.nama}</span>
+                <span class="text-tanah-500 tabular-nums">{a.jumlah} orang · {persenP(a.jumlah)}%</span>
+              </div>
+              <div class="h-2.5 rounded-full bg-krem-200 overflow-hidden">
+                <div class="h-full rounded-full bg-gradient-sunset" style={`width:${(a.jumlah / ringkasan.total) * 100}%`}></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="bg-white rounded-3xl border border-krem-200 shadow-sm p-8">
+        <h2 class="font-display font-bold text-lg text-tanah-900 mb-1">Tingkat Pendidikan</h2>
+        <p class="text-xs text-tanah-500 mb-6">Penduduk yang telah menamatkan jenjang</p>
+        <div class="space-y-3">
+          {pendidikan.map((e) => (
+            <div>
+              <div class="flex justify-between text-sm mb-1">
+                <span class="font-display font-semibold text-tanah-800">{e.nama}</span>
+                <span class="text-tanah-500 tabular-nums">{e.jumlah} orang</span>
+              </div>
+              <div class="h-2.5 rounded-full bg-krem-200 overflow-hidden">
+                <div class="h-full rounded-full bg-sawah-600" style={`width:${maxPendidikan ? (e.jumlah / maxPendidikan) * 100 : 0}%`}></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mata Pencaharian -->
+  <section class="bg-krem-100 py-16 md:py-24">
+    <div class="container-section">
+      <div class="max-w-3xl mb-10">
+        <div class="eyebrow mb-3">Ekonomi</div>
+        <h2 class="font-headline text-3xl md:text-4xl font-medium text-tanah-900 leading-tight mb-4 text-balance">
+          Mata Pencaharian.
+        </h2>
+        <p class="text-base text-tanah-600 leading-relaxed">
+          Sebaran penduduk bekerja menurut jenis pekerjaan — mencerminkan basis ekonomi kampung yang
+          bertumpu pada sektor pertanian.
+        </p>
+      </div>
+
+      <div class="bg-white rounded-3xl border border-krem-200 shadow-sm p-8">
+        <div class="space-y-3">
+          {pekerjaan.map((k) => (
+            <div>
+              <div class="flex justify-between text-sm mb-1">
+                <span class="font-display font-semibold text-tanah-800">{k.nama}</span>
+                <span class="text-tanah-500 tabular-nums">{k.jumlah} orang</span>
+              </div>
+              <div class="h-2.5 rounded-full bg-krem-200 overflow-hidden">
+                <div class="h-full rounded-full bg-gradient-sunset" style={`width:${maxPekerjaan ? (k.jumlah / maxPekerjaan) * 100 : 0}%`}></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <p class="text-xs text-tanah-500 mt-6 text-center">
+        Sumber: Data Pemerintah Kampung Lotaq, tahun {TAHUN}. Diperbarui secara berkala.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
