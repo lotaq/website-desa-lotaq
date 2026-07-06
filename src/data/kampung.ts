@@ -153,5 +153,6 @@ export const navigasi = [
   { label: 'Kelembagaan', href: '/kelembagaan' },
   { label: 'Potensi', href: '/potensi' },
   { label: 'Berita', href: '/berita' },
+  { label: 'Infografis', href: '/infografis' },
   { label: 'Kontak', href: '/kontak' }
 ];
