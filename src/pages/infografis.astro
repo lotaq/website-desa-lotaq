@@ -2,62 +2,40 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { kampung } from '../data/kampung';
 
-// Data kependudukan Kampung Lotaq (tahun 2026) — sumber: Pemerintah Kampung Lotaq
 const TAHUN = 2026;
 const ringkasan = { total: 450, lakiLaki: 235, perempuan: 215, kk: 156 };
 const rasioJK = Math.round((ringkasan.lakiLaki / ringkasan.perempuan) * 100);
 
 const usia = [
-  { band: '0–5', l: 26, p: 22 },
-  { band: '5–10', l: 16, p: 22 },
-  { band: '11–15', l: 19, p: 22 },
-  { band: '16–20', l: 18, p: 19 },
-  { band: '21–25', l: 25, p: 25 },
-  { band: '26–30', l: 19, p: 11 },
-  { band: '31–35', l: 23, p: 21 },
-  { band: '36–40', l: 15, p: 12 },
-  { band: '41–45', l: 16, p: 16 },
-  { band: '46–50', l: 16, p: 17 },
-  { band: '51–55', l: 17, p: 10 },
-  { band: '56–60', l: 11, p: 4 },
-  { band: '61–65', l: 6, p: 8 },
-  { band: '66–70', l: 3, p: 2 },
-  { band: '71–75', l: 3, p: 4 },
-  { band: '76+', l: 2, p: 0 },
+  { band: '0–5', l: 26, p: 22 }, { band: '5–10', l: 16, p: 22 },
+  { band: '11–15', l: 19, p: 22 }, { band: '16–20', l: 18, p: 19 },
+  { band: '21–25', l: 25, p: 25 }, { band: '26–30', l: 19, p: 11 },
+  { band: '31–35', l: 23, p: 21 }, { band: '36–40', l: 15, p: 12 },
+  { band: '41–45', l: 16, p: 16 }, { band: '46–50', l: 16, p: 17 },
+  { band: '51–55', l: 17, p: 10 }, { band: '56–60', l: 11, p: 4 },
+  { band: '61–65', l: 6, p: 8 }, { band: '66–70', l: 3, p: 2 },
+  { band: '71–75', l: 3, p: 4 }, { band: '76+', l: 2, p: 0 },
 ];
 const maxUsia = Math.max(...usia.flatMap((u) => [u.l, u.p]));
 
 const agama = [
-  { nama: 'Kristen', jumlah: 198 },
-  { nama: 'Katolik', jumlah: 185 },
-  { nama: 'Islam', jumlah: 66 },
-  { nama: 'Hindu', jumlah: 1 },
+  { nama: 'Kristen', jumlah: 198 }, { nama: 'Katolik', jumlah: 185 },
+  { nama: 'Islam', jumlah: 66 }, { nama: 'Hindu', jumlah: 1 },
 ];
-
 const pendidikan = [
-  { nama: 'Tamat SLTA', jumlah: 116 },
-  { nama: 'Tamat SD', jumlah: 73 },
-  { nama: 'Tamat SLTP', jumlah: 55 },
-  { nama: 'Tamat S1', jumlah: 14 },
-  { nama: 'Tamat D3', jumlah: 4 },
-  { nama: 'Tamat D1', jumlah: 1 },
-  { nama: 'Tamat D2', jumlah: 1 },
-  { nama: 'Tamat S2', jumlah: 1 },
+  { nama: 'Tamat SLTA', jumlah: 116 }, { nama: 'Tamat SD', jumlah: 73 },
+  { nama: 'Tamat SLTP', jumlah: 55 }, { nama: 'Tamat S1', jumlah: 14 },
+  { nama: 'Tamat D3', jumlah: 4 }, { nama: 'Tamat D1', jumlah: 1 },
+  { nama: 'Tamat D2', jumlah: 1 }, { nama: 'Tamat S2', jumlah: 1 },
   { nama: 'Tamat S3', jumlah: 0 },
 ];
 const maxPendidikan = Math.max(...pendidikan.map((x) => x.jumlah));
-
 const pekerjaan = [
-  { nama: 'Petani', jumlah: 50 },
-  { nama: 'Swasta', jumlah: 50 },
-  { nama: 'Lain-lain', jumlah: 50 },
-  { nama: 'Peternak', jumlah: 20 },
-  { nama: 'Pedagang', jumlah: 10 },
-  { nama: 'Tukang', jumlah: 10 },
-  { nama: 'PNS', jumlah: 4 },
-  { nama: 'Pensiunan', jumlah: 4 },
-  { nama: 'Buruh Tani', jumlah: 3 },
-  { nama: 'TNI / POLRI', jumlah: 0 },
+  { nama: 'Petani', jumlah: 50 }, { nama: 'Swasta', jumlah: 50 },
+  { nama: 'Lain-lain', jumlah: 50 }, { nama: 'Peternak', jumlah: 20 },
+  { nama: 'Pedagang', jumlah: 10 }, { nama: 'Tukang', jumlah: 10 },
+  { nama: 'PNS', jumlah: 4 }, { nama: 'Pensiunan', jumlah: 4 },
+  { nama: 'Buruh Tani', jumlah: 3 }, { nama: 'TNI / POLRI', jumlah: 0 },
 ];
 const maxPekerjaan = Math.max(...pekerjaan.map((x) => x.jumlah));
 
@@ -68,173 +46,266 @@ const kartuRingkasan = [
   { label: 'Perempuan', nilai: ringkasan.perempuan, satuan: 'jiwa' },
   { label: 'Kepala Keluarga', nilai: ringkasan.kk, satuan: 'KK' },
 ];
+
+// Indeks Desa (IDM) 2025 Kampung Lotaq — skor komponen 6 dimensi
+const idm = {
+  tahun: 2025,
+  total: 527,
+  dimensi: [
+    { nama: 'Layanan Dasar', skor: 143, sub: [ { nama: 'Pendidikan', skor: 30 }, { nama: 'Kesehatan', skor: 92 }, { nama: 'Utilitas Dasar', skor: 21 } ] },
+    { nama: 'Ekonomi', skor: 116, sub: [ { nama: 'Produksi Desa', skor: 32 }, { nama: 'Fasilitas Pendukung Ekonomi', skor: 84 } ] },
+    { nama: 'Lingkungan', skor: 80, sub: [ { nama: 'Pengelolaan Lingkungan', skor: 55 }, { nama: 'Penanggulangan Bencana', skor: 25 } ] },
+    { nama: 'Sosial', skor: 79, sub: [ { nama: 'Aktivitas Sosial', skor: 63 }, { nama: 'Fasilitas Masyarakat', skor: 16 } ] },
+    { nama: 'Tata Kelola Pemerintahan', skor: 62, sub: [ { nama: 'Kelembagaan & Pelayanan', skor: 33 }, { nama: 'Tata Kelola Keuangan', skor: 29 } ] },
+    { nama: 'Aksesibilitas', skor: 47, sub: [ { nama: 'Kondisi Akses Jalan', skor: 20 }, { nama: 'Kemudahan Akses', skor: 27 } ] },
+  ],
+};
+const maxDim = Math.max(...idm.dimensi.map((d) => d.skor));
+
+const tabs = [
+  { kode: 'penduduk', label: 'Penduduk', icon: 'M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z' },
+  { kode: 'apbdes', label: 'APBDes', icon: 'M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z' },
+  { kode: 'stunting', label: 'Stunting', icon: 'M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z' },
+  { kode: 'bansos', label: 'Bansos', icon: 'M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9' },
+  { kode: 'idm', label: 'IDM', icon: 'M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 01-.982-3.172M9.497 14.25a7.454 7.454 0 00.981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 007.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 002.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 012.916.52 6.003 6.003 0 01-5.395 4.972m0 0a6.726 6.726 0 01-2.749 1.35m0 0a6.772 6.772 0 01-3.044 0' },
+  { kode: 'sdgs', label: 'SDGs', icon: 'M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z' },
+];
+const iconOf = (kode: string) => tabs.find((t) => t.kode === kode)?.icon ?? '';
+
+const pending = [
+  { kode: 'apbdes', kategori: 'Keuangan', judul: 'APB Kampung (APBDes)', deskripsi: 'Ringkasan Pendapatan, Belanja, dan Pembiayaan kampung secara transparan.', sumber: 'Struktur mengacu Permendagri Nomor 20 Tahun 2018' },
+  { kode: 'stunting', kategori: 'Kesehatan', judul: 'Stunting', deskripsi: 'Prevalensi dan upaya penanganan stunting pada balita.', sumber: 'Sumber: e-PPGBM / Puskesmas' },
+  { kode: 'bansos', kategori: 'Kesejahteraan', judul: 'Bantuan Sosial', deskripsi: 'Data penerima manfaat program bantuan sosial.', sumber: 'Sumber: DTKS (Kementerian Sosial)' },
+  { kode: 'sdgs', kategori: 'Pembangunan Berkelanjutan', judul: 'SDGs Desa', deskripsi: 'Capaian 18 tujuan pembangunan berkelanjutan tingkat desa.', sumber: 'Sumber: SID / Prodeskel' },
+];
 ---
 
 <BaseLayout
   title="Infografis Kependudukan"
-  description={`Infografis data kependudukan ${kampung.namaLengkap} tahun ${TAHUN}: piramida penduduk, agama, pendidikan, dan mata pencaharian.`}
+  description={`Infografis data ${kampung.namaLengkap} tahun ${TAHUN}: kependudukan, APBDes, stunting, bansos, IDM, dan SDGs.`}
 >
-  <!-- Hero -->
   <section class="bg-gradient-to-br from-tanah-100 via-krem-100 to-sunset-50 pattern-dayak relative overflow-hidden">
     <div class="absolute top-10 right-10 w-72 h-72 bg-sunset-300/20 rounded-full blur-3xl"></div>
-    <div class="container-section py-20 md:py-24 relative">
+    <div class="container-section py-16 md:py-20 relative">
       <div class="max-w-4xl">
-        <div class="eyebrow mb-4">Infografis</div>
-        <h1 class="headline-display text-tanah-900 mb-6 text-balance">
-          Kampung Lotaq dalam <span class="highlight-brush">angka</span>.
-        </h1>
-        <p class="text-xl text-tanah-700 leading-relaxed max-w-3xl text-pretty">
-          Potret kependudukan {kampung.namaLengkap} tahun {TAHUN} — disajikan transparan
-          sebagai dasar perencanaan pembangunan dan pelayanan publik.
-        </p>
+        <div class="eyebrow mb-4">Infografis & Transparansi</div>
+        <h1 class="headline-display text-tanah-900 mb-6 text-balance">Kampung Lotaq dalam <span class="highlight-brush">angka</span>.</h1>
+        <p class="text-xl text-tanah-700 leading-relaxed max-w-3xl text-pretty">Data {kampung.namaLengkap} disajikan transparan sebagai wujud tata kelola terbuka dan dasar perencanaan pembangunan.</p>
       </div>
     </div>
   </section>
 
-  <!-- Ringkasan -->
-  <section class="container-section py-16 md:py-20">
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-      {kartuRingkasan.map((s) => (
-        <div class="bg-white rounded-2xl border border-krem-200 p-6 shadow-sm text-center">
-          <div class="font-headline text-4xl font-bold text-sunset-600 tabular-nums">{s.nilai.toLocaleString('id-ID')}</div>
-          <div class="text-xs text-tanah-500 mt-1">{s.satuan}</div>
-          <div class="text-sm font-display font-semibold text-tanah-800 mt-2">{s.label}</div>
-        </div>
-      ))}
-    </div>
-
-    <div class="mt-10 bg-white rounded-3xl border border-krem-200 shadow-sm p-8">
-      <div class="flex flex-wrap items-baseline justify-between gap-2 mb-4">
-        <h2 class="font-display font-bold text-lg text-tanah-900">Komposisi Jenis Kelamin</h2>
-        <span class="text-sm text-tanah-500">Rasio {rasioJK} laki-laki per 100 perempuan</span>
-      </div>
-      <div class="flex h-12 rounded-2xl overflow-hidden text-white font-display font-bold text-sm">
-        <div class="bg-sunset-500 flex items-center justify-center" style={`width:${persenP(ringkasan.lakiLaki)}%`}>
-          {persenP(ringkasan.lakiLaki)}%
-        </div>
-        <div class="bg-sawah-600 flex items-center justify-center" style={`width:${persenP(ringkasan.perempuan)}%`}>
-          {persenP(ringkasan.perempuan)}%
-        </div>
-      </div>
-      <div class="flex gap-6 mt-3 text-sm text-tanah-600">
-        <span class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-sunset-500"></span>Laki-laki ({ringkasan.lakiLaki})</span>
-        <span class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-sawah-600"></span>Perempuan ({ringkasan.perempuan})</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- Piramida Penduduk -->
-  <section class="bg-krem-100 py-16 md:py-24">
+  <div class="sticky top-20 z-30 bg-white/95 backdrop-blur-md border-b border-krem-200">
     <div class="container-section">
+      <div class="flex gap-1 sm:gap-2 overflow-x-auto">
+        {tabs.map((t, i) => (
+          <button data-tab={t.kode} type="button" class:list={['flex flex-col items-center gap-1.5 px-4 sm:px-6 py-4 border-b-2 transition-colors whitespace-nowrap', i === 0 ? 'text-sunset-600 border-sunset-500' : 'text-tanah-500 border-transparent hover:text-tanah-800']}>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" d={t.icon} /></svg>
+            <span class="text-sm font-display font-semibold">{t.label}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL: Penduduk -->
+  <div data-panel="penduduk">
+    <section class="container-section py-16 md:py-20">
+      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {kartuRingkasan.map((s) => (
+          <div class="bg-white rounded-2xl border border-krem-200 p-6 shadow-sm text-center">
+            <div class="font-headline text-4xl font-bold text-sunset-600 tabular-nums">{s.nilai.toLocaleString('id-ID')}</div>
+            <div class="text-xs text-tanah-500 mt-1">{s.satuan}</div>
+            <div class="text-sm font-display font-semibold text-tanah-800 mt-2">{s.label}</div>
+          </div>
+        ))}
+      </div>
+      <div class="mt-10 bg-white rounded-3xl border border-krem-200 shadow-sm p-8">
+        <div class="flex flex-wrap items-baseline justify-between gap-2 mb-4">
+          <h2 class="font-display font-bold text-lg text-tanah-900">Komposisi Jenis Kelamin</h2>
+          <span class="text-sm text-tanah-500">Rasio {rasioJK} laki-laki per 100 perempuan</span>
+        </div>
+        <div class="flex h-12 rounded-2xl overflow-hidden text-white font-display font-bold text-sm">
+          <div class="bg-sunset-500 flex items-center justify-center" style={`width:${persenP(ringkasan.lakiLaki)}%`}>{persenP(ringkasan.lakiLaki)}%</div>
+          <div class="bg-sawah-600 flex items-center justify-center" style={`width:${persenP(ringkasan.perempuan)}%`}>{persenP(ringkasan.perempuan)}%</div>
+        </div>
+        <div class="flex gap-6 mt-3 text-sm text-tanah-600">
+          <span class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-sunset-500"></span>Laki-laki ({ringkasan.lakiLaki})</span>
+          <span class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-sawah-600"></span>Perempuan ({ringkasan.perempuan})</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-krem-100 py-16 md:py-24">
+      <div class="container-section">
+        <div class="max-w-3xl mb-10">
+          <div class="eyebrow mb-3">Struktur Usia</div>
+          <h2 class="font-headline text-3xl md:text-4xl font-medium text-tanah-900 leading-tight mb-4 text-balance">Piramida Penduduk.</h2>
+          <p class="text-base text-tanah-600 leading-relaxed">Distribusi penduduk menurut kelompok umur dan jenis kelamin.</p>
+        </div>
+        <div class="bg-white rounded-3xl border border-krem-200 shadow-sm p-5 sm:p-8">
+          <div class="flex items-center justify-center gap-8 mb-6 text-sm font-display font-semibold">
+            <span class="flex items-center gap-2 text-tanah-700"><span class="w-3 h-3 rounded-sm bg-sunset-500"></span>Laki-laki</span>
+            <span class="flex items-center gap-2 text-tanah-700"><span class="w-3 h-3 rounded-sm bg-sawah-600"></span>Perempuan</span>
+          </div>
+          <div class="space-y-1.5">
+            {usia.map((u) => (
+              <div class="flex items-center gap-2 sm:gap-3">
+                <div class="flex-1 flex items-center justify-end gap-1.5">
+                  <span class="text-[10px] tabular-nums text-tanah-500 w-5 text-right">{u.l}</span>
+                  <div class="h-4 rounded-l bg-sunset-500 min-w-[2px]" style={`width:${(u.l / maxUsia) * 100}%`}></div>
+                </div>
+                <div class="w-12 shrink-0 text-center text-[11px] font-mono text-tanah-600">{u.band}</div>
+                <div class="flex-1 flex items-center justify-start gap-1.5">
+                  <div class="h-4 rounded-r bg-sawah-600 min-w-[2px]" style={`width:${(u.p / maxUsia) * 100}%`}></div>
+                  <span class="text-[10px] tabular-nums text-tanah-500 w-5">{u.p}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container-section py-16 md:py-20">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div class="bg-white rounded-3xl border border-krem-200 shadow-sm p-8">
+          <h2 class="font-display font-bold text-lg text-tanah-900 mb-6">Komposisi Pemeluk Agama</h2>
+          <div class="space-y-4">
+            {agama.map((a) => (
+              <div>
+                <div class="flex justify-between text-sm mb-1">
+                  <span class="font-display font-semibold text-tanah-800">{a.nama}</span>
+                  <span class="text-tanah-500 tabular-nums">{a.jumlah} orang · {persenP(a.jumlah)}%</span>
+                </div>
+                <div class="h-2.5 rounded-full bg-krem-200 overflow-hidden">
+                  <div class="h-full rounded-full bg-gradient-sunset" style={`width:${(a.jumlah / ringkasan.total) * 100}%`}></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div class="bg-white rounded-3xl border border-krem-200 shadow-sm p-8">
+          <h2 class="font-display font-bold text-lg text-tanah-900 mb-1">Tingkat Pendidikan</h2>
+          <p class="text-xs text-tanah-500 mb-6">Penduduk yang telah menamatkan jenjang</p>
+          <div class="space-y-3">
+            {pendidikan.map((e) => (
+              <div>
+                <div class="flex justify-between text-sm mb-1">
+                  <span class="font-display font-semibold text-tanah-800">{e.nama}</span>
+                  <span class="text-tanah-500 tabular-nums">{e.jumlah} orang</span>
+                </div>
+                <div class="h-2.5 rounded-full bg-krem-200 overflow-hidden">
+                  <div class="h-full rounded-full bg-sawah-600" style={`width:${maxPendidikan ? (e.jumlah / maxPendidikan) * 100 : 0}%`}></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-krem-100 py-16 md:py-24">
+      <div class="container-section">
+        <div class="max-w-3xl mb-10">
+          <div class="eyebrow mb-3">Ekonomi</div>
+          <h2 class="font-headline text-3xl md:text-4xl font-medium text-tanah-900 leading-tight mb-4 text-balance">Mata Pencaharian.</h2>
+          <p class="text-base text-tanah-600 leading-relaxed">Sebaran penduduk bekerja menurut jenis pekerjaan.</p>
+        </div>
+        <div class="bg-white rounded-3xl border border-krem-200 shadow-sm p-8">
+          <div class="space-y-3">
+            {pekerjaan.map((k) => (
+              <div>
+                <div class="flex justify-between text-sm mb-1">
+                  <span class="font-display font-semibold text-tanah-800">{k.nama}</span>
+                  <span class="text-tanah-500 tabular-nums">{k.jumlah} orang</span>
+                </div>
+                <div class="h-2.5 rounded-full bg-krem-200 overflow-hidden">
+                  <div class="h-full rounded-full bg-gradient-sunset" style={`width:${maxPekerjaan ? (k.jumlah / maxPekerjaan) * 100 : 0}%`}></div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <p class="text-xs text-tanah-500 mt-6 text-center">Sumber: Data Pemerintah Kampung Lotaq, tahun {TAHUN}. Diperbarui secara berkala.</p>
+      </div>
+    </section>
+  </div>
+
+  <!-- PANEL: IDM -->
+  <div data-panel="idm" class="hidden">
+    <section class="container-section py-16 md:py-20">
       <div class="max-w-3xl mb-10">
-        <div class="eyebrow mb-3">Struktur Usia</div>
-        <h2 class="font-headline text-3xl md:text-4xl font-medium text-tanah-900 leading-tight mb-4 text-balance">
-          Piramida Penduduk.
-        </h2>
-        <p class="text-base text-tanah-600 leading-relaxed">
-          Distribusi penduduk menurut kelompok umur dan jenis kelamin — menunjukkan struktur usia produktif
-          dan ketergantungan.
-        </p>
+        <div class="eyebrow mb-3">Perkembangan Desa</div>
+        <h2 class="font-headline text-3xl md:text-4xl font-medium text-tanah-900 leading-tight mb-4 text-balance">Indeks Desa (IDM) {idm.tahun}.</h2>
+        <p class="text-base text-tanah-600 leading-relaxed">Instrumen Indeks Desa yang mengintegrasikan Indeks Desa Membangun (IDM) dan kerangka SDGs Desa, mencakup enam dimensi pembangunan.</p>
       </div>
-
-      <div class="bg-white rounded-3xl border border-krem-200 shadow-sm p-5 sm:p-8">
-        <div class="flex items-center justify-center gap-8 mb-6 text-sm font-display font-semibold">
-          <span class="flex items-center gap-2 text-tanah-700"><span class="w-3 h-3 rounded-sm bg-sunset-500"></span>Laki-laki</span>
-          <span class="flex items-center gap-2 text-tanah-700"><span class="w-3 h-3 rounded-sm bg-sawah-600"></span>Perempuan</span>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <div class="bg-gradient-sunset rounded-3xl p-8 text-white shadow-sm">
+          <div class="text-xs uppercase tracking-wider font-display font-semibold text-white/80 mb-1">Total Skor Komponen</div>
+          <div class="font-headline text-5xl font-bold tabular-nums">{idm.total}</div>
+          <p class="text-sm text-white/80 mt-2">Akumulasi skor enam dimensi</p>
         </div>
-
-        <div class="space-y-1.5">
-          {usia.map((u) => (
-            <div class="flex items-center gap-2 sm:gap-3">
-              <div class="flex-1 flex items-center justify-end gap-1.5">
-                <span class="text-[10px] tabular-nums text-tanah-500 w-5 text-right">{u.l}</span>
-                <div class="h-4 rounded-l bg-sunset-500 min-w-[2px]" style={`width:${(u.l / maxUsia) * 100}%`}></div>
-              </div>
-              <div class="w-12 shrink-0 text-center text-[11px] font-mono text-tanah-600">{u.band}</div>
-              <div class="flex-1 flex items-center justify-start gap-1.5">
-                <div class="h-4 rounded-r bg-sawah-600 min-w-[2px]" style={`width:${(u.p / maxUsia) * 100}%`}></div>
-                <span class="text-[10px] tabular-nums text-tanah-500 w-5">{u.p}</span>
-              </div>
-            </div>
-          ))}
+        <div class="lg:col-span-2 bg-white rounded-3xl border border-krem-200 shadow-sm p-8 flex items-center">
+          <p class="text-sm text-tanah-600 leading-relaxed">Skor tertinggi pada dimensi <strong class="text-tanah-900">Layanan Dasar (143)</strong>, ditopang sub-dimensi Kesehatan (92) — Posyandu rutin, layanan dokter &amp; bidan, serta cakupan JKN. Ruang peningkatan terbesar pada <strong class="text-tanah-900">Aksesibilitas (47)</strong>: kondisi jalan, listrik, dan transportasi.</p>
         </div>
       </div>
-    </div>
-  </section>
-
-  <!-- Agama & Pendidikan -->
-  <section class="container-section py-16 md:py-20">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <div class="bg-white rounded-3xl border border-krem-200 shadow-sm p-8">
-        <h2 class="font-display font-bold text-lg text-tanah-900 mb-6">Komposisi Pemeluk Agama</h2>
-        <div class="space-y-4">
-          {agama.map((a) => (
+        <h3 class="font-display font-bold text-lg text-tanah-900 mb-6">Skor per Dimensi</h3>
+        <div class="space-y-5">
+          {idm.dimensi.map((d) => (
             <div>
-              <div class="flex justify-between text-sm mb-1">
-                <span class="font-display font-semibold text-tanah-800">{a.nama}</span>
-                <span class="text-tanah-500 tabular-nums">{a.jumlah} orang · {persenP(a.jumlah)}%</span>
+              <div class="flex justify-between items-baseline mb-1">
+                <span class="font-display font-semibold text-sm text-tanah-800">{d.nama}</span>
+                <span class="font-headline text-lg font-bold text-sunset-600 tabular-nums">{d.skor}</span>
               </div>
               <div class="h-2.5 rounded-full bg-krem-200 overflow-hidden">
-                <div class="h-full rounded-full bg-gradient-sunset" style={`width:${(a.jumlah / ringkasan.total) * 100}%`}></div>
+                <div class="h-full rounded-full bg-gradient-sunset" style={`width:${(d.skor / maxDim) * 100}%`}></div>
+              </div>
+              <div class="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-xs text-tanah-500">
+                {d.sub.map((sd) => (<span>{sd.nama}: <span class="tabular-nums font-semibold text-tanah-700">{sd.skor}</span></span>))}
               </div>
             </div>
           ))}
         </div>
+        <p class="text-xs text-tanah-400 mt-6 leading-relaxed">Sumber: Instrumen Indeks Desa Kampung Lotaq {idm.tahun} (idm.kemendesa.go.id). Angka merupakan skor komponen mentah; klasifikasi status desa ditetapkan Kemendesa melalui normalisasi resmi.</p>
       </div>
+    </section>
+  </div>
 
-      <div class="bg-white rounded-3xl border border-krem-200 shadow-sm p-8">
-        <h2 class="font-display font-bold text-lg text-tanah-900 mb-1">Tingkat Pendidikan</h2>
-        <p class="text-xs text-tanah-500 mb-6">Penduduk yang telah menamatkan jenjang</p>
-        <div class="space-y-3">
-          {pendidikan.map((e) => (
-            <div>
-              <div class="flex justify-between text-sm mb-1">
-                <span class="font-display font-semibold text-tanah-800">{e.nama}</span>
-                <span class="text-tanah-500 tabular-nums">{e.jumlah} orang</span>
-              </div>
-              <div class="h-2.5 rounded-full bg-krem-200 overflow-hidden">
-                <div class="h-full rounded-full bg-sawah-600" style={`width:${maxPendidikan ? (e.jumlah / maxPendidikan) * 100 : 0}%`}></div>
-              </div>
-            </div>
-          ))}
+  <!-- PANEL: modul dalam pemutakhiran -->
+  {pending.map((m) => (
+    <div data-panel={m.kode} class="hidden">
+      <section class="container-section py-20 md:py-28">
+        <div class="max-w-2xl mx-auto text-center">
+          <div class="w-16 h-16 mx-auto rounded-2xl bg-sunset-100 text-sunset-600 flex items-center justify-center mb-6">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-8 h-8"><path stroke-linecap="round" stroke-linejoin="round" d={iconOf(m.kode)} /></svg>
+          </div>
+          <div class="text-xs uppercase tracking-[0.2em] font-display font-semibold text-sunset-600 mb-3">{m.kategori}</div>
+          <h2 class="font-headline text-3xl md:text-4xl font-medium text-tanah-900 leading-tight mb-4 text-balance">{m.judul}</h2>
+          <p class="text-tanah-600 leading-relaxed mb-6">{m.deskripsi}</p>
+          <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-krem-200 text-tanah-700 text-sm font-display font-semibold"><span class="w-2 h-2 rounded-full bg-sunset-500"></span>Dalam Pemutakhiran</span>
+          <p class="text-xs text-tanah-400 mt-6">{m.sumber}</p>
         </div>
-      </div>
+      </section>
     </div>
-  </section>
+  ))}
 
-  <!-- Mata Pencaharian -->
-  <section class="bg-krem-100 py-16 md:py-24">
-    <div class="container-section">
-      <div class="max-w-3xl mb-10">
-        <div class="eyebrow mb-3">Ekonomi</div>
-        <h2 class="font-headline text-3xl md:text-4xl font-medium text-tanah-900 leading-tight mb-4 text-balance">
-          Mata Pencaharian.
-        </h2>
-        <p class="text-base text-tanah-600 leading-relaxed">
-          Sebaran penduduk bekerja menurut jenis pekerjaan — mencerminkan basis ekonomi kampung yang
-          bertumpu pada sektor pertanian.
-        </p>
-      </div>
-
-      <div class="bg-white rounded-3xl border border-krem-200 shadow-sm p-8">
-        <div class="space-y-3">
-          {pekerjaan.map((k) => (
-            <div>
-              <div class="flex justify-between text-sm mb-1">
-                <span class="font-display font-semibold text-tanah-800">{k.nama}</span>
-                <span class="text-tanah-500 tabular-nums">{k.jumlah} orang</span>
-              </div>
-              <div class="h-2.5 rounded-full bg-krem-200 overflow-hidden">
-                <div class="h-full rounded-full bg-gradient-sunset" style={`width:${maxPekerjaan ? (k.jumlah / maxPekerjaan) * 100 : 0}%`}></div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <p class="text-xs text-tanah-500 mt-6 text-center">
-        Sumber: Data Pemerintah Kampung Lotaq, tahun {TAHUN}. Diperbarui secara berkala.
-      </p>
-    </div>
-  </section>
+  <script>
+    const tabBtns = document.querySelectorAll('[data-tab]');
+    const panels = document.querySelectorAll('[data-panel]');
+    tabBtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const kode = btn.getAttribute('data-tab');
+        tabBtns.forEach((b) => {
+          const on = b === btn;
+          b.classList.toggle('text-sunset-600', on);
+          b.classList.toggle('border-sunset-500', on);
+          b.classList.toggle('text-tanah-500', !on);
+          b.classList.toggle('border-transparent', !on);
+        });
+        panels.forEach((p) => p.classList.toggle('hidden', p.getAttribute('data-panel') !== kode));
+      });
+    });
+  </script>
 </BaseLayout>
