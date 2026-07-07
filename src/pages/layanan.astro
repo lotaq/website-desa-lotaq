@@ -28,7 +28,7 @@ const surat = [
 
 const kategori = ['Semua', 'Pengantar', 'Keterangan', 'Rekomendasi'];
 
-const templatePesan = (jenis: string) => `*PERMOHONAN SURAT*
+const templatePesan = (jenis: string, syarat: string[]) => `*PERMOHONAN SURAT*
 Kampung Lotaq
 
 Jenis Surat: ${jenis}
@@ -38,9 +38,14 @@ NIK:
 Alamat (RT): 
 Keperluan: 
 
+📎 WAJIB LAMPIRKAN FOTO/SCAN DOKUMEN:
+${syarat.map((item) => '• ' + item).join('\n')}
+
+⚠️ PENTING: Permohonan TIDAK DAPAT DIPROSES tanpa lampiran dokumen di atas. Tekan ikon klip (📎) di WhatsApp, pilih foto dokumen, lalu kirim bersama pesan ini.
+
 Mohon diproses. Terima kasih.`;
 
-const waLink = (jenis: string) => `https://wa.me/${WA}?text=${encodeURIComponent(templatePesan(jenis))}`;
+const waLink = (jenis: string, syarat: string[]) => `https://wa.me/${WA}?text=${encodeURIComponent(templatePesan(jenis, syarat))}`;
 ---
 
 <BaseLayout
@@ -118,7 +123,7 @@ const waLink = (jenis: string) => `https://wa.me/${WA}?text=${encodeURIComponent
               </li>
             ))}
           </ul>
-          <a href={waLink(s.nama)} target="_blank" rel="noopener noreferrer" class="mt-auto inline-flex items-center justify-center gap-2 w-full px-4 py-3 rounded-full bg-sawah-600 hover:bg-sawah-700 text-white font-display font-semibold text-sm transition-colors">
+          <a href={waLink(s.nama, s.syarat)} target="_blank" rel="noopener noreferrer" class="mt-auto inline-flex items-center justify-center gap-2 w-full px-4 py-3 rounded-full bg-sawah-600 hover:bg-sawah-700 text-white font-display font-semibold text-sm transition-colors">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z" /></svg>
             Ajukan via WhatsApp
           </a>
