@@ -1,0 +1,143 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { kampung } from '../data/kampung';
+
+// Jajak pendapat warga. Tempel URL Google Form pada tiap objek.
+// formUrl  = link "Kirim/Send" Google Form (untuk mengisi suara)
+// hasilUrl = link "Ringkasan/Summary" publik (untuk melihat hasil)
+interface Polling {
+  id: string;
+  judul: string;
+  deskripsi: string;
+  status: 'aktif' | 'selesai';
+  tenggat?: string;
+  formUrl: string;
+  hasilUrl: string;
+  totalSuara?: number;
+}
+
+const polling: Polling[] = [
+  {
+    id: 'prioritas-2026',
+    judul: 'Prioritas Pembangunan Kampung Lotaq 2026',
+    deskripsi: 'Menurut Anda, sektor mana yang paling mendesak untuk diprioritaskan pembangunannya tahun ini?',
+    status: 'aktif',
+    tenggat: '31 Juli 2026',
+    formUrl: '', // ← tempel link "Kirim" Google Form (VERIFIKASI)
+    hasilUrl: '', // ← tempel link "Ringkasan" publik (VERIFIKASI)
+  },
+];
+
+const isUrl = (u: string) => typeof u === 'string' && u.startsWith('https://');
+const aktif = polling.filter((p) => p.status === 'aktif');
+const selesai = polling.filter((p) => p.status === 'selesai');
+---
+
+<BaseLayout
+  title="Voting & Jajak Pendapat"
+  description={`Jajak pendapat dan polling warga ${kampung.namaLengkap}. Sampaikan aspirasi Anda secara anonim dan transparan.`}
+>
+  <!-- Hero -->
+  <section class="bg-gradient-to-br from-tanah-100 via-krem-100 to-sunset-50 pattern-dayak relative overflow-hidden">
+    <div class="absolute top-10 right-10 w-72 h-72 bg-sunset-300/20 rounded-full blur-3xl"></div>
+    <div class="container-section py-16 md:py-20 relative">
+      <div class="max-w-4xl">
+        <div class="eyebrow mb-4">Partisipasi Warga</div>
+        <h1 class="headline-display text-tanah-900 mb-6 text-balance">Voting &amp; <span class="highlight-brush">Jajak Pendapat</span>.</h1>
+        <p class="text-xl text-tanah-700 leading-relaxed max-w-3xl text-pretty">
+          Suara Anda menentukan arah kampung. Ikuti jajak pendapat {kampung.namaLengkap} secara
+          anonim, mudah, dan transparan.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cara kerja -->
+  <section class="container-section py-12">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {[
+        { judul: 'Anonim', teks: 'Identitas Anda tidak dikumpulkan. Jawaban jujur, tanpa khawatir.' },
+        { judul: 'Satu Suara', teks: 'Setiap akun Google hanya dapat memberikan satu suara per polling.' },
+        { judul: 'Transparan', teks: 'Hasil ringkasan dapat dilihat publik setelah Anda memilih.' },
+      ].map((c) => (
+        <div class="bg-white rounded-3xl border border-krem-200 shadow-sm p-7">
+          <div class="text-xs uppercase tracking-wider font-display font-semibold text-sunset-600 mb-2">{c.judul}</div>
+          <p class="text-tanah-600 leading-relaxed text-sm">{c.teks}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Polling aktif -->
+  <section class="container-section pb-12">
+    <div class="max-w-3xl mb-8">
+      <div class="eyebrow mb-3">Polling Aktif</div>
+      <h2 class="font-headline text-3xl md:text-4xl font-medium text-tanah-900 leading-tight text-balance">Sedang Berlangsung.</h2>
+    </div>
+
+    {aktif.length === 0 ? (
+      <div class="bg-krem-100 rounded-3xl border border-krem-200 p-10 text-center text-tanah-500">
+        Belum ada polling aktif saat ini. Nantikan jajak pendapat berikutnya.
+      </div>
+    ) : (
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {aktif.map((p) => (
+          <div class="bg-white rounded-3xl border border-krem-200 shadow-sm p-8 flex flex-col">
+            <div class="flex items-center gap-2 mb-4">
+              <span class="inline-flex items-center gap-1.5 text-[11px] uppercase tracking-wider font-display font-semibold px-2.5 py-1 rounded-full bg-sawah-100 text-sawah-700">
+                <span class="w-2 h-2 rounded-full bg-sawah-600 animate-pulse"></span>Aktif
+              </span>
+              {p.tenggat && <span class="text-xs text-tanah-500">Hingga {p.tenggat}</span>}
+            </div>
+            <h3 class="font-headline text-2xl font-medium text-tanah-900 leading-snug mb-3 text-balance">{p.judul}</h3>
+            <p class="text-tanah-600 leading-relaxed mb-6 flex-1">{p.deskripsi}</p>
+            <div class="flex flex-wrap gap-3">
+              {isUrl(p.formUrl) ? (
+                <a href={p.formUrl} target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-gradient-sunset text-white font-display font-bold shadow-md hover:shadow-lg transition-shadow">Ikuti Polling</a>
+              ) : (
+                <span class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-krem-200 text-tanah-400 font-display font-bold cursor-not-allowed">Segera Dibuka</span>
+              )}
+              {isUrl(p.hasilUrl) && (
+                <a href={p.hasilUrl} target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-white border border-krem-200 text-tanah-700 hover:bg-krem-100 font-display font-semibold transition-colors">Lihat Hasil</a>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    )}
+  </section>
+
+  <!-- Sejarah hasil -->
+  {selesai.length > 0 && (
+    <section class="bg-krem-100 py-16 md:py-20">
+      <div class="container-section">
+        <div class="max-w-3xl mb-8">
+          <div class="eyebrow mb-3">Sejarah Hasil</div>
+          <h2 class="font-headline text-3xl md:text-4xl font-medium text-tanah-900 leading-tight text-balance">Polling Terdahulu.</h2>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {selesai.map((p) => (
+            <div class="bg-white rounded-2xl border border-krem-200 shadow-sm p-6 flex flex-col">
+              <span class="self-start text-[11px] uppercase tracking-wider font-display font-semibold px-2.5 py-1 rounded-full bg-krem-200 text-tanah-600 mb-3">Selesai</span>
+              <h3 class="font-display font-bold text-base text-tanah-900 leading-snug mb-2">{p.judul}</h3>
+              {p.totalSuara != null && <p class="text-xs text-tanah-500 mb-4">{p.totalSuara} suara masuk</p>}
+              {isUrl(p.hasilUrl) && (
+                <a href={p.hasilUrl} target="_blank" rel="noopener noreferrer" class="mt-auto inline-flex items-center gap-1.5 text-sunset-600 hover:text-sunset-700 font-display font-semibold text-sm">Lihat Hasil →</a>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Catatan -->
+  <section class="container-section py-12">
+    <div class="bg-white rounded-3xl border border-krem-200 p-8 max-w-3xl mx-auto text-center">
+      <p class="text-sm text-tanah-600 leading-relaxed">
+        Jajak pendapat ini bersifat <strong class="text-tanah-800">tidak mengikat</strong> dan bertujuan menjaring aspirasi warga.
+        Suara dikumpulkan melalui Google Formulir dengan pembatasan satu respons per akun Google untuk menjaga keadilan hasil.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
