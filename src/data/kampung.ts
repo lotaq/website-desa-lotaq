@@ -155,5 +155,6 @@ export const navigasi = [
   { label: 'Berita', href: '/berita' },
   { label: 'Infografis', href: '/infografis' },
   { label: 'Layanan', href: '/layanan' },
+  { label: 'Voting', href: '/voting' },
   { label: 'Kontak', href: '/kontak' }
 ];
