@@ -154,5 +154,6 @@ export const navigasi = [
   { label: 'Potensi', href: '/potensi' },
   { label: 'Berita', href: '/berita' },
   { label: 'Infografis', href: '/infografis' },
+  { label: 'Layanan', href: '/layanan' },
   { label: 'Kontak', href: '/kontak' }
 ];
