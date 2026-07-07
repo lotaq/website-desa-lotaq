@@ -1,0 +1,154 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { kampung } from '../data/kampung';
+
+// Nomor WhatsApp tujuan permohonan (nomor uji — ganti ke nomor resmi kampung)
+const WA = '6285652147263';
+
+// Katalog layanan surat. Persyaratan = DRAF UMUM, menunggu verifikasi resmi.
+const surat = [
+  { id: 'pengantar-pindah', nama: 'Surat Pengantar Pindah/Datang', kategori: 'Pengantar', syarat: ['Fotokopi KTP', 'Fotokopi Kartu Keluarga', 'Surat keterangan pindah dari daerah asal (untuk kedatangan)'] },
+  { id: 'pengantar-kk-ktp', nama: 'Surat Pengantar KK/KTP', kategori: 'Pengantar', syarat: ['Fotokopi Kartu Keluarga', 'Fotokopi KTP (bila ada)', 'Surat pengantar RT'] },
+  { id: 'pengantar-nikah', nama: 'Surat Pengantar Nikah', kategori: 'Pengantar', syarat: ['Fotokopi KTP', 'Fotokopi Kartu Keluarga', 'Fotokopi Akta Kelahiran', 'Pas foto latar biru'] },
+  { id: 'pengantar-skck', nama: 'Surat Pengantar SKCK', kategori: 'Pengantar', syarat: ['Fotokopi KTP', 'Fotokopi Kartu Keluarga', 'Pas foto latar merah'] },
+  { id: 'ket-usaha', nama: 'Surat Keterangan Usaha', kategori: 'Keterangan', syarat: ['Fotokopi KTP', 'Fotokopi Kartu Keluarga', 'Surat pengantar RT'] },
+  { id: 'ket-lahir', nama: 'Surat Keterangan Lahir', kategori: 'Keterangan', syarat: ['Fotokopi KTP ayah & ibu', 'Fotokopi Kartu Keluarga', 'Surat keterangan lahir dari bidan/rumah sakit', 'Fotokopi buku nikah'] },
+  { id: 'ket-tidak-mampu', nama: 'Surat Keterangan Tidak Mampu', kategori: 'Keterangan', syarat: ['Fotokopi KTP', 'Fotokopi Kartu Keluarga', 'Surat pengantar RT'] },
+  { id: 'ket-domisili', nama: 'Surat Keterangan Domisili', kategori: 'Keterangan', syarat: ['Fotokopi KTP', 'Fotokopi Kartu Keluarga', 'Surat pengantar RT'] },
+  { id: 'ket-kematian', nama: 'Surat Keterangan Kematian', kategori: 'Keterangan', syarat: ['Fotokopi KTP almarhum/almarhumah', 'Fotokopi Kartu Keluarga', 'Surat keterangan kematian dari fasilitas kesehatan (bila ada)', 'Fotokopi KTP pelapor'] },
+  { id: 'ket-belum-nikah', nama: 'Surat Keterangan Belum Nikah / Janda / Duda', kategori: 'Keterangan', syarat: ['Fotokopi KTP', 'Fotokopi Kartu Keluarga', 'Surat pengantar RT'] },
+  { id: 'ket-ahli-waris', nama: 'Surat Keterangan Ahli Waris', kategori: 'Keterangan', syarat: ['Fotokopi KTP para ahli waris', 'Fotokopi Kartu Keluarga', 'Surat Keterangan Kematian pewaris', 'Dokumen bukti hubungan keluarga'] },
+  { id: 'ket-kehilangan', nama: 'Surat Keterangan Kehilangan KTP/KK', kategori: 'Keterangan', syarat: ['Surat kehilangan dari Kepolisian', 'Fotokopi dokumen yang hilang (bila ada)', 'Fotokopi KTP/KK anggota keluarga'] },
+  { id: 'rek-bantuan-perusahaan', nama: 'Surat Permohonan Bantuan ke Perusahaan', kategori: 'Rekomendasi', syarat: ['Fotokopi KTP', 'Fotokopi Kartu Keluarga', 'Proposal permohonan bantuan', 'Surat pengantar RT'] },
+  { id: 'rek-umroh', nama: 'Surat Rekomendasi Umroh', kategori: 'Rekomendasi', syarat: ['Fotokopi KTP', 'Fotokopi Kartu Keluarga'] },
+  { id: 'rek-kerja', nama: 'Surat Rekomendasi Kerja', kategori: 'Rekomendasi', syarat: ['Fotokopi KTP', 'Fotokopi Kartu Keluarga', 'Surat pengantar RT'] },
+  { id: 'rek-bantuan-gereja', nama: 'Surat Rekomendasi Bantuan Gereja', kategori: 'Rekomendasi', syarat: ['Fotokopi KTP', 'Fotokopi Kartu Keluarga', 'Proposal permohonan', 'Surat pengantar pengurus gereja'] },
+  { id: 'pernyataan-kegiatan', nama: 'Surat Pernyataan Melaksanakan Kegiatan', kategori: 'Rekomendasi', syarat: ['Fotokopi KTP', 'Fotokopi Kartu Keluarga', 'Rincian/proposal kegiatan'] },
+];
+
+const kategori = ['Semua', 'Pengantar', 'Keterangan', 'Rekomendasi'];
+
+const templatePesan = (jenis: string) => `*PERMOHONAN SURAT*
+Kampung Lotaq
+
+Jenis Surat: ${jenis}
+
+Nama Lengkap: 
+NIK: 
+Alamat (RT): 
+Keperluan: 
+
+Mohon diproses. Terima kasih.`;
+
+const waLink = (jenis: string) => `https://wa.me/${WA}?text=${encodeURIComponent(templatePesan(jenis))}`;
+---
+
+<BaseLayout
+  title="Layanan Administrasi"
+  description={`Layanan administrasi ${kampung.namaLengkap}: katalog surat, persyaratan, dan pengajuan cepat via WhatsApp. Melayani 24 jam.`}
+>
+  <!-- Hero -->
+  <section class="bg-gradient-to-br from-tanah-100 via-krem-100 to-sunset-50 pattern-dayak relative overflow-hidden">
+    <div class="absolute top-10 right-10 w-72 h-72 bg-sunset-300/20 rounded-full blur-3xl"></div>
+    <div class="container-section py-16 md:py-20 relative">
+      <div class="max-w-4xl">
+        <div class="eyebrow mb-4">Layanan Publik</div>
+        <h1 class="headline-display text-tanah-900 mb-6 text-balance">Layanan <span class="highlight-brush">Administrasi</span>.</h1>
+        <p class="text-xl text-tanah-700 leading-relaxed max-w-3xl text-pretty mb-6">
+          Ajukan surat-menyurat kependudukan {kampung.namaLengkap} dengan cepat. Pilih jenis surat,
+          siapkan persyaratan, lalu ajukan langsung melalui WhatsApp.
+        </p>
+        <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-sawah-600 text-white text-sm font-display font-semibold">
+          <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span>Melayani 24 Jam
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Alur & Catatan -->
+  <section class="container-section py-12">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div class="lg:col-span-2 bg-white rounded-3xl border border-krem-200 shadow-sm p-8">
+        <h2 class="font-display font-bold text-lg text-tanah-900 mb-5">Cara Mengajukan</h2>
+        <ol class="space-y-3">
+          <li class="flex items-start gap-3"><span class="w-7 h-7 shrink-0 rounded-full bg-sunset-100 text-sunset-700 font-display font-bold text-sm flex items-center justify-center">1</span><span class="text-tanah-700">Pilih jenis surat, lalu baca persyaratannya.</span></li>
+          <li class="flex items-start gap-3"><span class="w-7 h-7 shrink-0 rounded-full bg-sunset-100 text-sunset-700 font-display font-bold text-sm flex items-center justify-center">2</span><span class="text-tanah-700">Klik <strong>Ajukan via WhatsApp</strong> — pesan otomatis terisi. Lengkapi data Anda, lalu kirim.</span></li>
+          <li class="flex items-start gap-3"><span class="w-7 h-7 shrink-0 rounded-full bg-sunset-100 text-sunset-700 font-display font-bold text-sm flex items-center justify-center">3</span><span class="text-tanah-700">Aparatur memverifikasi berkas. Surat diterbitkan dan ditandatangani pejabat berwenang.</span></li>
+        </ol>
+      </div>
+      <div class="bg-krem-100 rounded-3xl border border-krem-200 p-8">
+        <div class="flex items-center gap-2 text-sunset-700 mb-2">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" /></svg>
+          <span class="font-display font-bold text-sm uppercase tracking-wider">Perlu Verifikasi</span>
+        </div>
+        <p class="text-sm text-tanah-600 leading-relaxed">
+          Daftar persyaratan di bawah adalah <strong>draf umum</strong> dan masih menunggu verifikasi resmi
+          Pemerintah Kampung Lotaq. Surat hanya sah setelah diperiksa dan ditandatangani pejabat berwenang.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Filter kategori -->
+  <section class="container-section pb-4">
+    <div class="flex flex-wrap gap-2">
+      {kategori.map((k, i) => (
+        <button
+          data-filter={k}
+          type="button"
+          class:list={['px-5 py-2 rounded-full text-sm font-display font-semibold border border-krem-200 transition-colors', i === 0 ? 'bg-sunset-500 text-white' : 'bg-white text-tanah-700 hover:bg-krem-100']}
+        >{k}</button>
+      ))}
+    </div>
+  </section>
+
+  <!-- Katalog surat -->
+  <section class="container-section pb-20">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {surat.map((s) => (
+        <div data-kategori={s.kategori} class="bg-white rounded-3xl border border-krem-200 shadow-sm p-6 flex flex-col">
+          <span class="self-start text-[11px] uppercase tracking-wider font-display font-semibold px-2.5 py-1 rounded-full bg-sunset-100 text-sunset-700 mb-3">{s.kategori}</span>
+          <h3 class="font-display font-bold text-base text-tanah-900 leading-snug mb-4">{s.nama}</h3>
+          <div class="text-[11px] text-tanah-500 font-display font-semibold uppercase tracking-wider mb-2">Persyaratan (draf)</div>
+          <ul class="space-y-1.5 mb-6 flex-1">
+            {s.syarat.map((sy) => (
+              <li class="flex items-start gap-2 text-sm text-tanah-600">
+                <svg class="w-4 h-4 mt-0.5 shrink-0 text-sawah-600" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+                <span>{sy}</span>
+              </li>
+            ))}
+          </ul>
+          <a href={waLink(s.nama)} target="_blank" rel="noopener noreferrer" class="mt-auto inline-flex items-center justify-center gap-2 w-full px-4 py-3 rounded-full bg-sawah-600 hover:bg-sawah-700 text-white font-display font-semibold text-sm transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z" /></svg>
+            Ajukan via WhatsApp
+          </a>
+        </div>
+      ))}
+    </div>
+
+    <p class="text-xs text-tanah-400 mt-10 text-center max-w-3xl mx-auto leading-relaxed">
+      Data yang Anda kirim mengalir langsung ke WhatsApp resmi kantor kampung dan tidak disimpan di situs ini.
+      Pengisian NIK bersifat sukarela sebagaimana pelayanan tatap muka.
+    </p>
+  </section>
+
+  <script>
+    const fbtns = document.querySelectorAll('[data-filter]');
+    const cards = document.querySelectorAll('[data-kategori]');
+    fbtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const f = btn.getAttribute('data-filter');
+        fbtns.forEach((x) => {
+          const on = x === btn;
+          x.classList.toggle('bg-sunset-500', on);
+          x.classList.toggle('text-white', on);
+          x.classList.toggle('bg-white', !on);
+          x.classList.toggle('text-tanah-700', !on);
+        });
+        cards.forEach((c) => {
+          c.classList.toggle('hidden', f !== 'Semua' && c.getAttribute('data-kategori') !== f);
+        });
+      });
+    });
+  </script>
+</BaseLayout>
