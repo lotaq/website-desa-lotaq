@@ -1,0 +1,133 @@
+---
+// Widget "Jumlah Kunjungan" - statistik pengunjung situs.
+// Data diambil dari /api/visits (Cloudflare Pages Function + KV).
+// Widget otomatis tersembunyi jika API belum siap (misal KV belum di-binding),
+// supaya tidak ada tampilan rusak/error yang terlihat pengunjung.
+---
+
+<div
+  id="visit-counter"
+  class="fixed bottom-4 left-4 z-40 hidden font-body"
+  aria-live="polite"
+>
+  <!-- Pil ringkas (selalu terlihat saat widget aktif) -->
+  <button
+    id="visit-counter-toggle"
+    type="button"
+    class="flex items-center gap-2 rounded-full bg-tanah-800/95 backdrop-blur px-4 py-2.5 shadow-lg border border-white/10 text-white text-sm hover:bg-tanah-700/95 transition-colors"
+    aria-expanded="false"
+    aria-controls="visit-counter-panel"
+  >
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-sunset-300 flex-shrink-0">
+      <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z" />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+    <span class="whitespace-nowrap">
+      Kunjungan <strong id="visit-counter-today">–</strong> Hari Ini
+    </span>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="visit-counter-chevron" class="w-3.5 h-3.5 flex-shrink-0 transition-transform">
+      <polyline points="18 15 12 9 6 15" />
+    </svg>
+  </button>
+
+  <!-- Panel detail (muncul saat pil diklik) -->
+  <div
+    id="visit-counter-panel"
+    class="hidden mb-2 w-64 rounded-2xl bg-tanah-800/95 backdrop-blur shadow-xl border border-white/10 text-white overflow-hidden absolute bottom-full left-0"
+  >
+    <div class="px-4 py-3 border-b border-white/10">
+      <p class="font-headline text-base">Jumlah Kunjungan</p>
+    </div>
+    <dl class="px-4 py-2 text-sm divide-y divide-white/10">
+      <div class="flex items-center justify-between py-2">
+        <dt class="text-white/70">Hari Ini</dt>
+        <dd id="stat-today" class="font-semibold tabular-nums">–</dd>
+      </div>
+      <div class="flex items-center justify-between py-2">
+        <dt class="text-white/70">Kemarin</dt>
+        <dd id="stat-yesterday" class="font-semibold tabular-nums">–</dd>
+      </div>
+      <div class="flex items-center justify-between py-2">
+        <dt class="text-white/70">Minggu Ini</dt>
+        <dd id="stat-thisWeek" class="font-semibold tabular-nums">–</dd>
+      </div>
+      <div class="flex items-center justify-between py-2">
+        <dt class="text-white/70">Minggu Lalu</dt>
+        <dd id="stat-lastWeek" class="font-semibold tabular-nums">–</dd>
+      </div>
+      <div class="flex items-center justify-between py-2">
+        <dt class="text-white/70">Bulan Ini</dt>
+        <dd id="stat-thisMonth" class="font-semibold tabular-nums">–</dd>
+      </div>
+      <div class="flex items-center justify-between py-2">
+        <dt class="text-white/70">Bulan Lalu</dt>
+        <dd id="stat-lastMonth" class="font-semibold tabular-nums">–</dd>
+      </div>
+      <div class="flex items-center justify-between py-2">
+        <dt class="text-sunset-300">Total Kunjungan</dt>
+        <dd id="stat-total" class="font-bold tabular-nums text-sunset-300">–</dd>
+      </div>
+    </dl>
+  </div>
+</div>
+
+<script>
+  const SESSION_FLAG = 'lotaqVisitCounted';
+  const container = document.getElementById('visit-counter');
+  const toggleBtn = document.getElementById('visit-counter-toggle');
+  const panel = document.getElementById('visit-counter-panel');
+  const chevron = document.getElementById('visit-counter-chevron');
+
+  function formatNumber(n: number): string {
+    return n.toLocaleString('id-ID');
+  }
+
+  function renderStats(stats: Record<string, number>) {
+    const fields = ['today', 'yesterday', 'thisWeek', 'lastWeek', 'thisMonth', 'lastMonth', 'total'];
+    for (const field of fields) {
+      const el = document.getElementById(`stat-${field}`);
+      if (el && typeof stats[field] === 'number') {
+        el.textContent = formatNumber(stats[field]);
+      }
+    }
+    const todayEl = document.getElementById('visit-counter-today');
+    if (todayEl && typeof stats.today === 'number') {
+      todayEl.textContent = formatNumber(stats.today);
+    }
+  }
+
+  async function loadStats() {
+    try {
+      const res = await fetch('/api/visits', { method: 'GET' });
+      if (!res.ok) throw new Error('API tidak tersedia');
+      const stats = await res.json();
+      if (stats && typeof stats.today === 'number') {
+        renderStats(stats);
+        container?.classList.remove('hidden');
+      }
+    } catch (err) {
+      // API belum siap (misal KV belum di-binding) - sembunyikan widget diam-diam
+      container?.classList.add('hidden');
+    }
+  }
+
+  async function countVisitIfNeeded() {
+    try {
+      if (!sessionStorage.getItem(SESSION_FLAG)) {
+        await fetch('/api/visits', { method: 'POST' });
+        sessionStorage.setItem(SESSION_FLAG, '1');
+      }
+    } catch (err) {
+      // Diamkan - kegagalan increment tidak boleh mengganggu pengalaman pengunjung
+    }
+  }
+
+  toggleBtn?.addEventListener('click', () => {
+    const isHidden = panel?.classList.contains('hidden');
+    panel?.classList.toggle('hidden');
+    chevron?.classList.toggle('rotate-180');
+    toggleBtn.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
+  });
+
+  countVisitIfNeeded().then(loadStats);
+</script>
