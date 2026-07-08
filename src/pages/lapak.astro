@@ -23,6 +23,21 @@ const umkm: UMKM[] = [
 
 const kategori = ['Semua', 'Kuliner', 'Kerajinan', 'Pertanian', 'Jasa'];
 
+const pengrajin = [
+  { nama: 'KENGISAN', keahlian: ['Mengukir', 'Menempa'] },
+  { nama: 'LAHMADI', keahlian: ['Mengukir'] },
+  { nama: 'KASA', keahlian: ['Seraung'] },
+  { nama: 'SAMSI', keahlian: ['Menempa'] },
+  { nama: 'ALAMSYAH', keahlian: ['Menempa'] },
+  { nama: 'ELBINA', keahlian: ['Seraung'] },
+  { nama: 'ROSALINA RINI', keahlian: ['Menganyam'] },
+  { nama: 'SUSANA', keahlian: ['Menenun', 'Menganyam', 'Menyulam'] },
+  { nama: 'THERESSIA', keahlian: ['Menyulam'] },
+  { nama: 'MARSELINA MESRA', keahlian: ['Seraung'] },
+];
+const daftarKeahlian = ['Mengukir', 'Menempa', 'Menenun', 'Menganyam', 'Menyulam', 'Seraung'];
+const distribusiKeahlian = daftarKeahlian.map((k) => ({ nama: k, jumlah: pengrajin.filter((pr) => pr.keahlian.includes(k)).length }));
+
 function inisial(nama: string) {
   const kata = nama.replace(/[^A-Za-z\s]/g, ' ').split(/\s+/).filter(Boolean);
   if (kata.length === 0) return '-';
@@ -127,6 +142,46 @@ const waLink = (u: UMKM) =>
       Lapak Desa adalah etalase pemberdayaan UMKM warga. Transaksi (harga, pembayaran, pengiriman) berlangsung
       langsung antara pembeli dan penjual; Pemerintah Kampung Lotaq berperan sebagai fasilitator, bukan perantara jual-beli.
     </p>
+  </section>
+
+  <!-- Pengrajin Kampung -->
+  <section class="bg-krem-100 py-16 md:py-24">
+    <div class="container-section">
+      <div class="max-w-3xl mb-8">
+        <div class="eyebrow mb-3">Kearifan Lokal</div>
+        <h2 class="font-headline text-3xl md:text-4xl font-medium text-tanah-900 leading-tight mb-4 text-balance">Pengrajin Kampung.</h2>
+        <p class="text-base text-tanah-600 leading-relaxed">Warga pemilik keahlian kerajinan tradisional Dayak Benuaq — ukir, tempa, tenun, anyam, sulam, hingga seraung.</p>
+      </div>
+
+      <div class="flex flex-wrap gap-3 mb-10">
+        {distribusiKeahlian.map((d) => (
+          <div class="bg-white rounded-2xl border border-krem-200 px-4 py-3 shadow-sm text-center min-w-[5.5rem]">
+            <div class="font-headline text-2xl font-bold text-sunset-600 tabular-nums">{d.jumlah}</div>
+            <div class="text-xs text-tanah-600 font-display font-semibold">{d.nama}</div>
+          </div>
+        ))}
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {pengrajin.map((pr) => (
+          <div class="bg-white rounded-2xl border border-krem-200 shadow-sm p-5 flex items-center gap-4">
+            <div class="w-12 h-12 rounded-full bg-gradient-sunset flex items-center justify-center shrink-0">
+              <span class="font-headline text-base font-bold text-white">{inisial(pr.nama)}</span>
+            </div>
+            <div class="min-w-0">
+              <p class="font-display font-bold text-sm text-tanah-900 leading-tight mb-1.5">{pr.nama}</p>
+              <div class="flex flex-wrap gap-1">
+                {pr.keahlian.length > 0 ? pr.keahlian.map((k) => (
+                  <span class="text-[11px] px-2 py-0.5 rounded-full bg-sawah-100 text-sawah-700">{k}</span>
+                )) : (
+                  <span class="text-[11px] text-tanah-400">Belum terdata</span>
+                )}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   </section>
 
   <script>
