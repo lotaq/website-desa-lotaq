@@ -149,12 +149,21 @@ export const beritaContoh = [
 
 export const navigasi = [
   { label: 'Beranda', href: '/' },
-  { label: 'Profil', href: '/profil' },
-  { label: 'Kelembagaan', href: '/kelembagaan' },
-  { label: 'Potensi', href: '/potensi' },
-  { label: 'Berita', href: '/berita' },
-  { label: 'Infografis', href: '/infografis' },
-  { label: 'Layanan', href: '/layanan' },
-  { label: 'Voting', href: '/voting' },
+  { label: 'Profil Kampung', children: [
+    { label: 'Profil', href: '/profil' },
+    { label: 'Kelembagaan', href: '/kelembagaan' },
+  ] },
+  { label: 'Potensi & Usaha', children: [
+    { label: 'Potensi', href: '/potensi' },
+    { label: 'Lapak Desa', href: '/lapak' },
+  ] },
+  { label: 'Informasi', children: [
+    { label: 'Berita', href: '/berita' },
+    { label: 'Infografis', href: '/infografis' },
+  ] },
+  { label: 'Layanan Publik', children: [
+    { label: 'Layanan', href: '/layanan' },
+    { label: 'Voting', href: '/voting' },
+  ] },
   { label: 'Kontak', href: '/kontak' }
 ];
