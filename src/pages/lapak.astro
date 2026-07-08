@@ -1,0 +1,151 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { kampung } from '../data/kampung';
+
+// Etalase UMKM. Isi `wa` (nomor 62…) untuk mengaktifkan tombol order.
+interface UMKM {
+  id: string;
+  nama: string;
+  pemilik: string;
+  kategori: 'Kuliner' | 'Kerajinan' | 'Pertanian' | 'Jasa';
+  deskripsi: string;
+  produk: string[];
+  wa: string; // kosong = tombol nonaktif (VERIFIKASI)
+  foto?: string;
+}
+
+const umkm: UMKM[] = [
+  { id: 'beras-mayas', nama: 'Beras Mayas Lotaq', pemilik: 'Kelompok Tani (verifikasi)', kategori: 'Pertanian', deskripsi: 'Beras Mayas khas Kampung Lotaq, hasil pertanian lokal warga — mendukung ketahanan pangan kampung.', produk: ['Beras Mayas', 'Beras merah', 'Gabah kering'], wa: '', foto: undefined },
+  { id: 'olahan-pangan', nama: 'Olahan Pangan Lokal', pemilik: 'PKK / UMKM (verifikasi)', kategori: 'Kuliner', deskripsi: 'Aneka keripik dan olahan pangan berbahan hasil bumi Kampung Lotaq.', produk: ['Keripik singkong', 'Keripik pisang', 'Gula aren'], wa: '', foto: undefined },
+  { id: 'anyaman-rotan', nama: 'Anyaman Rotan Dayak Benuaq', pemilik: 'Pengrajin (verifikasi)', kategori: 'Kerajinan', deskripsi: 'Kerajinan anyaman rotan bermotif khas Dayak Benuaq, dibuat tangan oleh pengrajin lokal.', produk: ['Anjat', 'Tikar rotan', 'Topi seraung'], wa: '', foto: undefined },
+  { id: 'jasa-warga', nama: 'Jasa Angkut & Pertukangan', pemilik: 'Warga (verifikasi)', kategori: 'Jasa', deskripsi: 'Layanan angkut hasil bumi dan jasa pertukangan oleh warga Kampung Lotaq.', produk: ['Jasa angkut', 'Pertukangan kayu', 'Perbaikan rumah'], wa: '', foto: undefined },
+];
+
+const kategori = ['Semua', 'Kuliner', 'Kerajinan', 'Pertanian', 'Jasa'];
+
+function inisial(nama: string) {
+  const kata = nama.replace(/[^A-Za-z\s]/g, ' ').split(/\s+/).filter(Boolean);
+  if (kata.length === 0) return '-';
+  if (kata.length === 1) return kata[0].slice(0, 2).toUpperCase();
+  return (kata[0][0] + kata[1][0]).toUpperCase();
+}
+const punyaWa = (w: string) => typeof w === 'string' && w.replace(/[^0-9]/g, '').length >= 8;
+const waLink = (u: UMKM) =>
+  `https://wa.me/${u.wa.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
+    `Halo ${u.nama}, saya menemukan usaha Anda di Lapak Desa Kampung Lotaq. Saya tertarik memesan produk Anda. Mohon informasi ketersediaan dan harga. Terima kasih.`
+  )}`;
+---
+
+<BaseLayout
+  title="Lapak Desa"
+  description={`Etalase UMKM ${kampung.namaLengkap}: produk kuliner, kerajinan, pertanian, dan jasa warga. Pesan langsung ke penjual via WhatsApp.`}
+>
+  <!-- Hero -->
+  <section class="bg-gradient-to-br from-sawah-100 via-krem-100 to-sunset-50 pattern-dayak relative overflow-hidden">
+    <div class="absolute top-10 right-10 w-72 h-72 bg-sawah-300/20 rounded-full blur-3xl"></div>
+    <div class="container-section py-16 md:py-20 relative">
+      <div class="max-w-4xl">
+        <div class="eyebrow mb-4">Ekonomi Warga</div>
+        <h1 class="headline-display text-tanah-900 mb-6 text-balance">Lapak <span class="highlight-brush">Desa</span>.</h1>
+        <p class="text-xl text-tanah-700 leading-relaxed max-w-3xl text-pretty">
+          Etalase produk dan jasa UMKM {kampung.namaLengkap}. Dukung ekonomi warga — pesan
+          langsung ke pelaku usaha melalui WhatsApp.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cara order -->
+  <section class="container-section py-12">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {[
+        { n: '1', judul: 'Pilih Usaha', teks: 'Telusuri UMKM warga berdasarkan kategori.' },
+        { n: '2', judul: 'Pesan via WhatsApp', teks: 'Klik tombol pesan — chat otomatis terisi ke penjual.' },
+        { n: '3', judul: 'Transaksi Langsung', teks: 'Harga, pembayaran, dan pengiriman diatur langsung dengan penjual.' },
+      ].map((c) => (
+        <div class="bg-white rounded-3xl border border-krem-200 shadow-sm p-7 flex items-start gap-4">
+          <span class="w-9 h-9 shrink-0 rounded-full bg-sawah-100 text-sawah-700 font-display font-bold flex items-center justify-center">{c.n}</span>
+          <div>
+            <div class="font-display font-bold text-tanah-900 mb-1">{c.judul}</div>
+            <p class="text-sm text-tanah-600 leading-relaxed">{c.teks}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Filter -->
+  <section class="container-section pb-4">
+    <div class="flex flex-wrap gap-2">
+      {kategori.map((k, i) => (
+        <button
+          data-filter={k}
+          type="button"
+          class:list={['px-5 py-2 rounded-full text-sm font-display font-semibold border border-krem-200 transition-colors', i === 0 ? 'bg-sawah-600 text-white' : 'bg-white text-tanah-700 hover:bg-krem-100']}
+        >{k}</button>
+      ))}
+    </div>
+  </section>
+
+  <!-- Grid UMKM -->
+  <section class="container-section pb-20">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {umkm.map((u) => (
+        <div data-kategori={u.kategori} class="bg-white rounded-3xl border border-krem-200 shadow-sm p-6 flex flex-col">
+          <div class="flex items-center gap-4 mb-4">
+            <div class="w-14 h-14 rounded-2xl bg-gradient-sunset flex items-center justify-center shrink-0 overflow-hidden relative">
+              <span class="font-headline text-lg font-bold text-white">{inisial(u.nama)}</span>
+              {u.foto && (
+                <img src={u.foto} alt={`Foto ${u.nama}`} loading="lazy" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.display='none';" />
+              )}
+            </div>
+            <div class="min-w-0">
+              <span class="inline-block text-[11px] uppercase tracking-wider font-display font-semibold px-2 py-0.5 rounded-full bg-sawah-100 text-sawah-700 mb-1">{u.kategori}</span>
+              <h3 class="font-display font-bold text-base text-tanah-900 leading-tight">{u.nama}</h3>
+            </div>
+          </div>
+          <p class="text-xs text-tanah-500 mb-2">Pemilik: {u.pemilik}</p>
+          <p class="text-sm text-tanah-600 leading-relaxed mb-4">{u.deskripsi}</p>
+          <div class="flex flex-wrap gap-1.5 mb-6">
+            {u.produk.map((pr) => (
+              <span class="text-xs px-2.5 py-1 rounded-full bg-krem-100 text-tanah-700 border border-krem-200">{pr}</span>
+            ))}
+          </div>
+          {punyaWa(u.wa) ? (
+            <a href={waLink(u)} target="_blank" rel="noopener noreferrer" class="mt-auto inline-flex items-center justify-center gap-2 w-full px-4 py-3 rounded-full bg-sawah-600 hover:bg-sawah-700 text-white font-display font-semibold text-sm transition-colors">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 9.75a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z" /></svg>
+              Pesan via WhatsApp
+            </a>
+          ) : (
+            <span class="mt-auto inline-flex items-center justify-center gap-2 w-full px-4 py-3 rounded-full bg-krem-200 text-tanah-400 font-display font-semibold text-sm cursor-not-allowed">Segera Hadir</span>
+          )}
+        </div>
+      ))}
+    </div>
+
+    <p class="text-xs text-tanah-400 mt-10 text-center max-w-3xl mx-auto leading-relaxed">
+      Lapak Desa adalah etalase pemberdayaan UMKM warga. Transaksi (harga, pembayaran, pengiriman) berlangsung
+      langsung antara pembeli dan penjual; Pemerintah Kampung Lotaq berperan sebagai fasilitator, bukan perantara jual-beli.
+    </p>
+  </section>
+
+  <script>
+    const fbtns = document.querySelectorAll('[data-filter]');
+    const cards = document.querySelectorAll('[data-kategori]');
+    fbtns.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const f = btn.getAttribute('data-filter');
+        fbtns.forEach((x) => {
+          const on = x === btn;
+          x.classList.toggle('bg-sawah-600', on);
+          x.classList.toggle('text-white', on);
+          x.classList.toggle('bg-white', !on);
+          x.classList.toggle('text-tanah-700', !on);
+        });
+        cards.forEach((c) => {
+          c.classList.toggle('hidden', f !== 'Semua' && c.getAttribute('data-kategori') !== f);
+        });
+      });
+    });
+  </script>
+</BaseLayout>
