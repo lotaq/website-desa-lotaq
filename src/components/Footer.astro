@@ -1,6 +1,6 @@
 ---
 import { kampung, navigasi } from '../data/kampung';
-
+const tautanFooter = navigasi.flatMap((item: any) => (item.children ? item.children : [item]));
 const tahunSekarang = new Date().getFullYear();
 ---
 
@@ -34,7 +34,7 @@ const tahunSekarang = new Date().getFullYear();
           Jelajahi
         </h3>
         <ul class="space-y-2">
-          {navigasi.map((item) => (
+          {tautanFooter.map((item) => (
             <li>
               <a 
                 href={item.href}
