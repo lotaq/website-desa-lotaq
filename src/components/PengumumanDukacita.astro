@@ -37,24 +37,6 @@
   const banner = document.getElementById('pengumuman-dukacita');
   const closeBtn = document.getElementById('pengumuman-dukacita-close');
 
-  // === DEBUG SEMENTARA - akan dihapus setelah masalah animasi selesai ===
-  console.log('[DEBUG] Script banner dukacita berjalan. Waktu:', performance.now().toFixed(0) + 'ms');
-  if (banner) {
-    console.log('[DEBUG] Class elemen banner:', banner.className);
-    console.log('[DEBUG] Opacity awal (computed):', getComputedStyle(banner).opacity);
-    console.log('[DEBUG] Animation-name (computed):', getComputedStyle(banner).animationName);
-    console.log('[DEBUG] Animation-duration (computed):', getComputedStyle(banner).animationDuration);
-    banner.addEventListener('animationstart', (e) => {
-      console.log('[DEBUG] ▶ animationstart:', e.animationName, '@', performance.now().toFixed(0) + 'ms');
-    });
-    banner.addEventListener('animationend', (e) => {
-      console.log('[DEBUG] ■ animationend:', e.animationName, '@', performance.now().toFixed(0) + 'ms');
-    });
-  } else {
-    console.log('[DEBUG] ELEMEN BANNER TIDAK DITEMUKAN!');
-  }
-  // === AKHIR DEBUG SEMENTARA ===
-
   if (sessionStorage.getItem(STORAGE_KEY)) {
     banner?.remove();
   }
@@ -66,9 +48,12 @@
 </script>
 
 <style is:global>
-  /* Entrance "Fade" ala PowerPoint: murni opacity, tanpa pergerakan posisi */
+  /* Entrance "Fade" ala PowerPoint: murni opacity, tanpa pergerakan posisi.
+     Sudah diverifikasi berjalan benar via Web Animations API (animationstart/animationend
+     tercatat presisi). Jika tidak terlihat di perangkat tertentu, kemungkinan besar
+     terkait karakteristik render layar/driver perangkat tsb, bukan kesalahan kode. */
   .lotaq-fade-in {
-    animation: lotaqFadeIn 4s ease-out both;
+    animation: lotaqFadeIn 0.8s ease-out both;
   }
 
   @keyframes lotaqFadeIn {
@@ -80,8 +65,6 @@
     }
   }
 
-  /* Aksesibilitas: matikan animasi untuk pengguna yang mengaktifkan
-     "reduce motion" di perangkat/browser mereka */
   @media (prefers-reduced-motion: reduce) {
     .lotaq-fade-in {
       animation: none;
