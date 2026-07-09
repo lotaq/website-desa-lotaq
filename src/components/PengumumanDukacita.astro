@@ -37,6 +37,24 @@
   const banner = document.getElementById('pengumuman-dukacita');
   const closeBtn = document.getElementById('pengumuman-dukacita-close');
 
+  // === DEBUG SEMENTARA - akan dihapus setelah masalah animasi selesai ===
+  console.log('[DEBUG] Script banner dukacita berjalan. Waktu:', performance.now().toFixed(0) + 'ms');
+  if (banner) {
+    console.log('[DEBUG] Class elemen banner:', banner.className);
+    console.log('[DEBUG] Opacity awal (computed):', getComputedStyle(banner).opacity);
+    console.log('[DEBUG] Animation-name (computed):', getComputedStyle(banner).animationName);
+    console.log('[DEBUG] Animation-duration (computed):', getComputedStyle(banner).animationDuration);
+    banner.addEventListener('animationstart', (e) => {
+      console.log('[DEBUG] ▶ animationstart:', e.animationName, '@', performance.now().toFixed(0) + 'ms');
+    });
+    banner.addEventListener('animationend', (e) => {
+      console.log('[DEBUG] ■ animationend:', e.animationName, '@', performance.now().toFixed(0) + 'ms');
+    });
+  } else {
+    console.log('[DEBUG] ELEMEN BANNER TIDAK DITEMUKAN!');
+  }
+  // === AKHIR DEBUG SEMENTARA ===
+
   if (sessionStorage.getItem(STORAGE_KEY)) {
     banner?.remove();
   }
@@ -50,7 +68,7 @@
 <style is:global>
   /* Entrance "Fade" ala PowerPoint: murni opacity, tanpa pergerakan posisi */
   .lotaq-fade-in {
-    animation: lotaqFadeIn 0.8s ease-out both;
+    animation: lotaqFadeIn 4s ease-out both;
   }
 
   @keyframes lotaqFadeIn {
