@@ -35,7 +35,8 @@ export const petinggi = {
   nama: 'KARYA MUSNI. Y',
   jabatan: 'Petinggi Kampung Lotaq',
   periode: '2021 - 2029',
-  foto: '/foto-petinggi.jpeg', // Akan diupload nanti
+  foto: '/foto-petinggi.jpeg', // Dipakai di Sambutan Petinggi (Beranda)
+     fotoSotk: '/foto-petinggi-sotk.jpg', // Dipakai khusus di SOTK (Profil Kampung)
   sambutan: {
     pembuka: 'Assalamualaikum Warahmatullahi Wabarakatuh, Salam Sejahtera bagi kita semua.',
     paragraf1: 'Selamat datang di portal resmi Pemerintah Kampung Lotaq. Atas nama seluruh aparatur Kampung dan masyarakat, kami menyambut Bapak/Ibu dengan tangan terbuka.',
