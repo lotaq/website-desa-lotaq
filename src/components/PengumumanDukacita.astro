@@ -6,7 +6,7 @@
 
 <section
   id="pengumuman-dukacita"
-  class="relative bg-black"
+  class="relative bg-black lotaq-fade-in"
   aria-label="Pengumuman duka cita"
 >
   <button
@@ -46,3 +46,27 @@
     banner?.remove();
   });
 </script>
+
+<style>
+  /* Entrance "Fade" ala PowerPoint: murni opacity, tanpa pergerakan posisi */
+  .lotaq-fade-in {
+    animation: lotaqFadeIn 0.8s ease-out both;
+  }
+
+  @keyframes lotaqFadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  /* Aksesibilitas: matikan animasi untuk pengguna yang mengaktifkan
+     "reduce motion" di perangkat/browser mereka */
+  @media (prefers-reduced-motion: reduce) {
+    .lotaq-fade-in {
+      animation: none;
+    }
+  }
+</style>
