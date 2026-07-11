@@ -130,4 +130,37 @@
   });
 
   countVisitIfNeeded().then(loadStats);
+
+   // Hindari widget menutupi teks footer: saat footer mulai terlihat,
+   // widget otomatis "naik" mengikuti tepi atas footer.
+   const footer = document.getElementById('site-footer');
+   const DEFAULT_BOTTOM = 16; // sesuai kelas bottom-4 (1rem = 16px)
+   const GAP_ABOVE_FOOTER = 16;
+   let ticking = false;
+
+   function adjustPosition() {
+     if (!container || !footer) return;
+     const footerRect = footer.getBoundingClientRect();
+     const overlap = window.innerHeight - footerRect.top;
+     if (overlap > 0) {
+       container.style.bottom = `${overlap + GAP_ABOVE_FOOTER}px`;
+     } else {
+       container.style.bottom = `${DEFAULT_BOTTOM}px`;
+     }
+     ticking = false;
+   }
+
+   function requestAdjust() {
+     if (!ticking) {
+       ticking = true;
+       requestAnimationFrame(adjustPosition);
+     }
+   }
+
+   if (footer) {
+     window.addEventListener('scroll', requestAdjust, { passive: true });
+     window.addEventListener('resize', requestAdjust);
+     adjustPosition();
+   }
+   </script>
 </script>
