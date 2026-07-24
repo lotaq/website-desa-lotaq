@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArtikelTerpopuler from '../../components/ArtikelTerpopuler.astro';
 import { getCollection } from 'astro:content';
 
 // Ambil semua berita, urut tanggal terbaru
@@ -112,6 +113,23 @@ const warnaKategori: Record<string, string> = {
       </a>
     </section>
   )}
+
+  <!-- Data penanda judul & link semua artikel, dipakai widget Artikel Terpopuler
+       untuk mencocokkan slug -> judul (tidak tampil, hanya dibaca JavaScript) -->
+  <div class="hidden" aria-hidden="true">
+    {sortedBerita.map((berita) => (
+      <span
+        data-artikel-slug={berita.slug}
+        data-artikel-judul={berita.data.judul}
+        data-artikel-href={`/berita/${berita.slug}`}
+      ></span>
+    ))}
+  </div>
+
+  <!-- Artikel Terpopuler -->
+  <section class="container-section pt-12">
+    <ArtikelTerpopuler />
+  </section>
 
   <!-- Berita Lainnya -->
   <section class="container-section py-20">
