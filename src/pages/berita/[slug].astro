@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArtikelViewCounter from '../../components/ArtikelViewCounter.astro';
 import { getCollection, type CollectionEntry } from 'astro:content';
 
 export async function getStaticPaths() {
@@ -93,6 +94,7 @@ const relatedBerita = allBerita
             <time class="text-sm text-tanah-500 font-display" datetime={entry.data.tanggal.toISOString()}>
               📅 {formatTanggal(entry.data.tanggal)}
             </time>
+            <ArtikelViewCounter slug={entry.slug} />
           </div>
 
           <!-- Judul -->
