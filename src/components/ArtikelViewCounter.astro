@@ -1,0 +1,63 @@
+---
+interface Props {
+  slug: string;
+}
+const { slug } = Astro.props;
+---
+
+<span
+  class="artikel-view-counter inline-flex items-center gap-1.5 text-sm text-tanah-500 font-display"
+  data-slug={slug}
+>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 flex-shrink-0">
+    <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z" />
+    <circle cx="12" cy="12" r="3" />
+  </svg>
+  <span class="view-count">–</span>
+  <span>kali dibaca</span>
+</span>
+
+<script>
+  function formatNumber(n: number): string {
+    return n.toLocaleString('id-ID');
+  }
+
+  async function initViewCounter(el: Element) {
+    const slug = el.getAttribute('data-slug');
+    if (!slug) return;
+    const countEl = el.querySelector('.view-count');
+    const sessionKey = `lotaqArticleViewed:${slug}`;
+
+    try {
+      // Hitung 1 view per sesi browser (hindari 1 orang refresh berkali-kali dianggap banyak view)
+      if (!sessionStorage.getItem(sessionKey)) {
+        const res = await fetch('/api/article-views', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ slug }),
+        });
+        if (res.ok) {
+          const data = await res.json();
+          sessionStorage.setItem(sessionKey, '1');
+          if (countEl && typeof data.views === 'number') {
+            countEl.textContent = formatNumber(data.views);
+            return;
+          }
+        }
+      }
+      // Sudah pernah dihitung di sesi ini (atau POST gagal) - cukup ambil angka terkini
+      const res2 = await fetch(`/api/article-views?slug=${encodeURIComponent(slug)}`);
+      if (res2.ok) {
+        const data2 = await res2.json();
+        if (countEl && typeof data2.views === 'number') {
+          countEl.textContent = formatNumber(data2.views);
+        }
+      }
+    } catch (err) {
+      // API belum siap - sembunyikan diam-diam, jangan ganggu tampilan artikel
+      el.classList.add('hidden');
+    }
+  }
+
+  document.querySelectorAll('.artikel-view-counter').forEach(initViewCounter);
+</script>
