@@ -1,0 +1,220 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const allBerita = await getCollection('berita');
+const sortedByDate = allBerita.sort(
+  (a, b) => new Date(b.data.tanggal).valueOf() - new Date(a.data.tanggal).valueOf()
+);
+
+// Daftar tahun yang tersedia (dari tanggal terbit artikel), untuk pilihan filter
+const tahunTersedia = Array.from(
+  new Set(sortedByDate.map((b) => new Date(b.data.tanggal).getFullYear()))
+).sort((a, b) => b - a);
+
+const formatTanggal = (tanggal: Date) => {
+  return new Date(tanggal).toLocaleDateString('id-ID', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+};
+---
+
+<BaseLayout
+  title="Statistik Berita"
+  description="Peringkat lengkap seluruh artikel berita Kampung Lotaq berdasarkan jumlah kali dibaca."
+>
+  <section class="container-section py-16 md:py-20">
+    <div class="max-w-3xl mb-10">
+      <div class="eyebrow mb-4">Statistik Berita</div>
+      <h1 class="headline-display text-tanah-900 mb-4 text-balance">
+        Peringkat <span class="highlight-brush">artikel terbaca</span>.
+      </h1>
+      <p class="text-lg text-tanah-700 leading-relaxed">
+        Seluruh artikel berita Kampung Lotaq, diurutkan otomatis dari yang paling banyak dibaca.
+        Berguna untuk melihat performa konten sepanjang tahun tanpa perlu memeriksa satu per satu.
+      </p>
+    </div>
+
+    <!-- Filter Tahun -->
+    <div class="flex flex-wrap items-center gap-3 mb-8">
+      <span class="text-sm font-display font-semibold text-tanah-700">Tampilkan:</span>
+      <div id="filter-tahun" class="flex flex-wrap gap-2">
+        <button
+          type="button"
+          data-tahun="semua"
+          class="filter-tahun-btn px-4 py-2 rounded-full text-sm font-display font-semibold bg-sunset-600 text-white transition-colors"
+        >
+          Semua Tahun
+        </button>
+        {tahunTersedia.map((tahun) => (
+          <button
+            type="button"
+            data-tahun={tahun}
+            class="filter-tahun-btn px-4 py-2 rounded-full text-sm font-display font-semibold bg-krem-100 text-tanah-700 hover:bg-krem-200 transition-colors"
+          >
+            {tahun}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <!-- Data artikel (tersembunyi, dibaca JavaScript) -->
+    <div class="hidden" aria-hidden="true">
+      {sortedByDate.map((berita) => (
+        <span
+          data-stat-slug={berita.slug}
+          data-stat-judul={berita.data.judul}
+          data-stat-kategori={berita.data.kategori}
+          data-stat-tanggal={new Date(berita.data.tanggal).toISOString()}
+          data-stat-tanggal-format={formatTanggal(berita.data.tanggal)}
+          data-stat-tahun={new Date(berita.data.tanggal).getFullYear()}
+          data-stat-href={`/berita/${berita.slug}`}
+        ></span>
+      ))}
+    </div>
+
+    <!-- Loading state -->
+    <div id="stat-loading" class="bg-krem-100 rounded-2xl p-12 text-center">
+      <p class="text-tanah-600">Memuat data statistik...</p>
+    </div>
+
+    <!-- Tabel hasil -->
+    <div id="stat-table-wrapper" class="hidden bg-white border border-krem-200 rounded-3xl shadow-sm overflow-hidden">
+      <table class="w-full text-sm">
+        <thead class="bg-krem-50 border-b border-krem-200">
+          <tr>
+            <th class="text-left px-4 md:px-6 py-4 font-display font-semibold text-tanah-700 w-12">#</th>
+            <th class="text-left px-4 md:px-6 py-4 font-display font-semibold text-tanah-700">Judul Artikel</th>
+            <th class="text-left px-4 md:px-6 py-4 font-display font-semibold text-tanah-700 hidden md:table-cell">Kategori</th>
+            <th class="text-left px-4 md:px-6 py-4 font-display font-semibold text-tanah-700 hidden md:table-cell">Tanggal Terbit</th>
+            <th class="text-right px-4 md:px-6 py-4 font-display font-semibold text-tanah-700">Kali Dibaca</th>
+          </tr>
+        </thead>
+        <tbody id="stat-table-body" class="divide-y divide-krem-100">
+          <!-- Diisi otomatis oleh JavaScript -->
+        </tbody>
+      </table>
+    </div>
+
+    <div id="stat-empty" class="hidden bg-krem-100 rounded-2xl p-12 text-center">
+      <p class="text-tanah-700 font-display font-semibold text-lg mb-2">Belum ada data pembacaan</p>
+      <p class="text-tanah-600 text-sm">Statistik akan muncul otomatis setelah artikel mulai dibaca pengunjung.</p>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  interface ArtikelViews {
+    slug: string;
+    views: number;
+  }
+  interface ArtikelMeta {
+    slug: string;
+    judul: string;
+    kategori: string;
+    tanggalFormat: string;
+    tahun: number;
+    href: string;
+  }
+
+  function formatNumber(n: number): string {
+    return n.toLocaleString('id-ID');
+  }
+
+  let semuaArtikel: (ArtikelMeta & { views: number })[] = [];
+  let filterAktif: string = 'semua';
+
+  function renderTable() {
+    const tbody = document.getElementById('stat-table-body');
+    const wrapper = document.getElementById('stat-table-wrapper');
+    const empty = document.getElementById('stat-empty');
+    if (!tbody || !wrapper || !empty) return;
+
+    const data =
+      filterAktif === 'semua'
+        ? semuaArtikel
+        : semuaArtikel.filter((a) => String(a.tahun) === filterAktif);
+
+    if (data.length === 0) {
+      wrapper.classList.add('hidden');
+      empty.classList.remove('hidden');
+      return;
+    }
+
+    tbody.innerHTML = '';
+    data.forEach((artikel, i) => {
+      const tr = document.createElement('tr');
+      tr.className = 'hover:bg-krem-50 transition-colors';
+      tr.innerHTML = `
+        <td class="px-4 md:px-6 py-4 text-tanah-500 font-display">${i + 1}</td>
+        <td class="px-4 md:px-6 py-4">
+          <a href="${artikel.href}" class="font-display font-medium text-tanah-900 hover:text-sunset-600 transition-colors leading-snug">${artikel.judul}</a>
+          <div class="md:hidden text-xs text-tanah-500 mt-1">${artikel.kategori} · ${artikel.tanggalFormat}</div>
+        </td>
+        <td class="px-4 md:px-6 py-4 text-tanah-600 hidden md:table-cell">${artikel.kategori}</td>
+        <td class="px-4 md:px-6 py-4 text-tanah-600 hidden md:table-cell">${artikel.tanggalFormat}</td>
+        <td class="px-4 md:px-6 py-4 text-right font-display font-bold text-sunset-600">${formatNumber(artikel.views)}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    wrapper.classList.remove('hidden');
+    empty.classList.add('hidden');
+  }
+
+  function setupFilterButtons() {
+    document.querySelectorAll('.filter-tahun-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-tahun-btn').forEach((b) => {
+          b.classList.remove('bg-sunset-600', 'text-white');
+          b.classList.add('bg-krem-100', 'text-tanah-700');
+        });
+        btn.classList.remove('bg-krem-100', 'text-tanah-700');
+        btn.classList.add('bg-sunset-600', 'text-white');
+        filterAktif = btn.getAttribute('data-tahun') || 'semua';
+        renderTable();
+      });
+    });
+  }
+
+  async function loadStatistik() {
+    const loading = document.getElementById('stat-loading');
+    const wrapper = document.getElementById('stat-table-wrapper');
+    const empty = document.getElementById('stat-empty');
+
+    try {
+      const res = await fetch('/api/article-views');
+      if (!res.ok) throw new Error('API tidak tersedia');
+      const data = await res.json();
+      const viewsList: ArtikelViews[] = data.articles || [];
+      const viewsMap = new Map(viewsList.map((a) => [a.slug, a.views]));
+
+      const metaList: ArtikelMeta[] = [];
+      document.querySelectorAll('[data-stat-slug]').forEach((el) => {
+        metaList.push({
+          slug: el.getAttribute('data-stat-slug') || '',
+          judul: el.getAttribute('data-stat-judul') || '',
+          kategori: el.getAttribute('data-stat-kategori') || '',
+          tanggalFormat: el.getAttribute('data-stat-tanggal-format') || '',
+          tahun: parseInt(el.getAttribute('data-stat-tahun') || '0', 10),
+          href: el.getAttribute('data-stat-href') || '',
+        });
+      });
+
+      semuaArtikel = metaList
+        .map((m) => ({ ...m, views: viewsMap.get(m.slug) || 0 }))
+        .sort((a, b) => b.views - a.views);
+
+      loading?.classList.add('hidden');
+      setupFilterButtons();
+      renderTable();
+    } catch (err) {
+      loading?.classList.add('hidden');
+      empty?.classList.remove('hidden');
+    }
+  }
+
+  loadStatistik();
+</script>
