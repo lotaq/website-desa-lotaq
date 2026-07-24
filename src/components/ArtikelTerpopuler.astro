@@ -1,0 +1,82 @@
+---
+// Widget "Artikel Terpopuler" - menampilkan artikel dengan jumlah "kali dibaca"
+// terbanyak, diambil dari /api/article-views. Data dimuat via JavaScript di
+// browser (bukan saat build), supaya selalu menampilkan angka terkini.
+---
+
+<div id="artikel-terpopuler" class="hidden bg-white border border-krem-200 rounded-3xl shadow-sm p-8 md:p-10">
+  <div class="eyebrow mb-3">Artikel Terpopuler</div>
+  <ol id="artikel-terpopuler-list" class="space-y-3">
+    <!-- Diisi otomatis oleh JavaScript -->
+  </ol>
+</div>
+
+<script>
+  interface ArtikelPopuler {
+    slug: string;
+    views: number;
+  }
+
+  function formatNumber(n: number): string {
+    return n.toLocaleString('id-ID');
+  }
+
+  async function loadArtikelTerpopuler() {
+    const container = document.getElementById('artikel-terpopuler');
+    const list = document.getElementById('artikel-terpopuler-list');
+    if (!container || !list) return;
+
+    try {
+      const res = await fetch('/api/article-views');
+      if (!res.ok) throw new Error('API tidak tersedia');
+      const data = await res.json();
+      const articles: ArtikelPopuler[] = (data.articles || []).filter(
+        (a: ArtikelPopuler) => a.views > 0
+      );
+
+      if (articles.length === 0) {
+        // Belum ada data view sama sekali - jangan tampilkan widget kosong
+        return;
+      }
+
+      const top5 = articles.slice(0, 5);
+
+      // Ambil judul artikel dari elemen tersembunyi yang sudah di-render Astro
+      // saat build (lihat data-artikel-judul di berita/index.astro)
+      const judulMap = new Map<string, { judul: string; href: string }>();
+      document.querySelectorAll('[data-artikel-slug]').forEach((el) => {
+        const slug = el.getAttribute('data-artikel-slug');
+        const judul = el.getAttribute('data-artikel-judul');
+        const href = el.getAttribute('data-artikel-href');
+        if (slug && judul && href) {
+          judulMap.set(slug, { judul, href });
+        }
+      });
+
+      list.innerHTML = '';
+      top5.forEach((artikel, i) => {
+        const info = judulMap.get(artikel.slug);
+        if (!info) return; // artikel mungkin sudah dihapus dari konten
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <a href="${info.href}" class="flex items-start gap-3 group">
+            <span class="flex-shrink-0 w-7 h-7 rounded-full bg-sunset-100 text-sunset-700 font-display font-bold text-sm flex items-center justify-center">${i + 1}</span>
+            <span class="flex-1 min-w-0">
+              <span class="block font-display font-medium text-tanah-900 group-hover:text-sunset-600 transition-colors leading-snug">${info.judul}</span>
+              <span class="block text-xs text-tanah-500 mt-0.5">${formatNumber(artikel.views)} kali dibaca</span>
+            </span>
+          </a>
+        `;
+        list.appendChild(li);
+      });
+
+      if (list.children.length > 0) {
+        container.classList.remove('hidden');
+      }
+    } catch (err) {
+      // API belum siap - widget tetap tersembunyi, tidak mengganggu halaman
+    }
+  }
+
+  loadArtikelTerpopuler();
+</script>
